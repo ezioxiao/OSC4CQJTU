@@ -4,18 +4,18 @@
 <div class="am-container">
     <form method="post" class="am-form" data-am-validator>
     <fieldset>
-      <label for="email">一卡通卡号:</label>
-      <input type="text" name="uid" id="email" value="" required>
+      <label for="email">用户名:</label>
+      <input type="text" name="uid" id="email" placeholder="请输入用户名" required>
       <br>
-      <label for="password">一卡通密码:</label>
-      <input type="password" name="password" id="password" value="" required>
+      <label for="password">密码:</label>
+      <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="长度6-20位" required>
       <br>
       <label for="password">确认密码:</label>
-      <input type="password" placeholder="请与上面输入的值一致" data-equal-to="#password" required>
+      <input type="password" minlength="6" maxlength="20" placeholder="请与上面输入的值一致" data-equal-to="#password" required>
       <br>
       <label for="password">验证码:</label>
       <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">
-      <input type="text" name="verify" id="verify" value="" required>
+      <input type="text" name="verify" id="verify" maxlength="5" placeholder="请输入验证码" required>
       <br>    
       <div class="am-btn-group am-btn-group-justify am-cf">
         <input type="submit" value="注 册" class="am-btn am-btn-primary am-radius am-fl">

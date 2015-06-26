@@ -10,16 +10,20 @@ class UserController extends SimpleController {
     public function login(){
     	if(session('?uid'))$this->redirect('order');
     	if(IS_POST){
-            $database = M('user');
-            if (!$database->autoCheckToken($_POST)){
-                $this->error('令牌验证错误');
-            }             
+            $database = M('user');  
+            if(!D("User")->create()){
+                $this->error(D("User")->getError(),U('User/login')); 
+            }         
             if(!$this->checkVerify(I('post.verify'))){
                 $this->error('验证码错误',U('User/login'));
             }                 		
-    		$user = $database->where('uid = :uid and password = :password')->bind(array(':uid'=>I('post.uid'),':password'=>sha1(I('post.password'))))->find();
+    		$user = $database->where('uid = :uid')->bind(array(':uid'=>I('post.uid')))->find();
+            if(empty($user)){
+                $this->error('用户不存在',U('User/login'));
+            }
+            $user = $database->where('uid = :uid and password = :password')->bind(array(':uid'=>I('post.uid'),':password'=>sha1(C('DB_PREFIX').I('post.password').'_'.$user['salt'])))->find();
     		if(empty($user)){
-    			$this->error('账户不存在或密码不匹配',U('User/login'));
+    			$this->error('密码不匹配',U('User/login'));
     		}else{
     			$data['lastip'] = get_client_ip();
     			$data['lasttime'] = time();
@@ -37,10 +41,10 @@ class UserController extends SimpleController {
     public function register(){
     	if(session('?uid'))$this->redirect('order');
     	if(IS_POST){
-    		$database = M('user');
-            if (!$database->autoCheckToken($_POST)){
-                $this->error('令牌验证错误');
-            }             
+    		$database = M('user');            
+            if(!D("User")->create()){
+                $this->error(D("User")->getError(),U('User/register'));
+            }
             if(!$this->checkVerify(I('post.verify'))){
                 $this->error('验证码错误',U('User/register'));
             }
@@ -95,7 +99,10 @@ class UserController extends SimpleController {
             if(!selectCheck($data['area'],$data['building']))$this->error('参数非法');
     		$data['location'] = I('post.location');
     		$data['tel'] = I('post.tel');
-    		$data['pssword'] = I('post.password');
+    		if(!empty(I('post.password'))){
+                $data['salt'] = salt();
+                $data['pssword'] = sha1(C('DB_PREFIX').I('post.password').'_'.$data['salt']);
+            }
     		$update = $database->where('uid=:uid')->bind(':uid',session('uid'))->filter('strip_tags')->save($data);
     		if($update){
     			$this->success('个人信息更新成功');
