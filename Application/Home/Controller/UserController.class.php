@@ -122,7 +122,7 @@ class UserController extends SimpleController {
         $Verify =     new \Think\Verify();
         // 设置验证码字符为纯数字
         $Verify->codeSet = '0123456789'; 
-        $Verify->entry();       
+        $Verify->entry();
     }
 
     // 检测输入的验证码是否正确，$code为用户输入的验证码字符串

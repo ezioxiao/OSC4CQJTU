@@ -3,13 +3,13 @@
 
 <div class="am-container">
     <form method="post" class="am-form">
-      <label for="email">用户名:</label>
-      <input type="text" name="uid" id="email" placeholder="请输入用户名" required>
+      <label for="username">用户名:</label>
+      <input type="text" name="uid" id="username" placeholder="请输入用户名" required>
       <br>
       <label for="password">密码:</label>
       <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="请输入密码" required>
       <br>
-      <label for="password">验证码:</label>
+      <label for="verify">验证码:</label>
       <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">
       <input type="text" name="verify" id="verify" maxlength="5" placeholder="请输入验证码" required>
       <br>    
