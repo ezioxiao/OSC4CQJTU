@@ -1,0 +1,23 @@
+<include file="Public/header" />
+<include file="Public/nav" />
+
+<div class="am-container">
+    <form method="post" class="am-form">
+      <label for="email">一卡通卡号:</label>
+      <input type="text" name="uid" id="email" value="" required>
+      <br>
+      <label for="password">一卡通密码:</label>
+      <input type="password" name="password" id="password" value="" required>
+      <br>
+      <label for="password">验证码:</label>
+      <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">
+      <input type="text" name="verify" id="verify" value="" required>
+      <br>    
+      <div class="am-btn-group am-btn-group-justify am-cf">
+        <input type="submit" name="" value="登 录" class="am-btn am-btn-primary am-radius am-fl">
+        <input type="button" name="" value="忘记密码" class="am-btn am-btn-default am-radius am-fr">
+      </div>
+    </form>
+</div>
+
+<include file="Public/footer" />

@@ -1,0 +1,83 @@
+<include file="Public/header" />
+<style>
+.scrollspy-nav{
+	top:0;z-index:100;
+	background:#0e90d2;
+	width:100%;
+	padding:0 10px
+}
+.scrollspy-nav ul{
+	margin:0;padding:0
+}
+.scrollspy-nav li{
+	display:inline-block;
+	list-style:none
+}
+.scrollspy-nav a{
+	color:#eee;
+	padding:10px 20px;
+	display:
+	inline-block
+}
+.scrollspy-nav a.am-active{
+	color:#fff;
+	font-weight:700
+}
+.am-panel{
+	margin-top:20px
+}
+</style>
+<include file="Public/nav" />
+
+<div class="am-container">
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">工单进度</div>
+  <div class="am-panel-bd">
+  <if condition="!empty($detail['donetime'])" >
+  	<li>{:date('Y年m月d日 H:i:s',$detail['donetime'])} 处理完毕</li>
+  </if>  
+  <if condition="!empty($detail['dotime'])" >
+  	<li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 确认工单，正在处理</li>
+  </if>  
+    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 提交工单</li>
+  </div>
+</div>
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">报修信息</div>
+  <div class="am-panel-bd">
+    <switch name="detail.emerg">
+    <case value="0">
+    <li>报修类型：普通</li>
+    <li>报修区域：{:area($detail['area'])}</li>
+    <li>报修楼栋：{:building($detail['area'],$detail['building'])}</li>
+    <li>报修寝室：{$detail.location}</li>
+    <li>报修物品：{$detail.good}</li>
+    <li>故障描述：{$detail.description}</li>
+    </case>
+    <case value="1">
+    <li>报修类型：紧急</li>
+    <li>报修区域：{:area($detail['area'])}</li>
+    <li>报修地点：{$detail.location}</li>
+    <li>故障描述：{$detail.description}</li>    
+    </case>
+    </switch>
+  </div>
+</div>
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">用户信息</div>
+  <div class="am-panel-bd">
+    <if condition="($user['uid'] eq session('uid')) or session('?admin')">
+    <li>报修用户：{$user.uid}</li>
+    <li>联系电话：{$user.tel}</li>
+    <else/>
+    仅本人和管理员可见
+    </if>
+  </div>
+</div>
+
+</div>
+
+<include file="Public/footer" />

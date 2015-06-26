@@ -1,0 +1,115 @@
+<include file="Public/header" />
+
+<style>
+	.content-list {
+	  border: 1px solid #e9ecf1;
+	  margin-bottom: 20px;
+	}
+
+	.content-list li {
+	  border: 1px solid #e9ecf1;
+	  border-width: 0 1px;
+	  margin-left: -1px;
+	}
+
+	.content-list li:first-child {
+	  border-left: none;
+	}
+
+	.content-list li:last-child {
+	  border-right: none;
+	}	
+
+	.am-alert a{
+		color:#666;
+	}
+</style>
+
+<include file="Public/nav" />
+
+<div class="am-container">
+<div class="am-alert am-alert-secondary" data-am-alert>
+  <button type="button" class="am-close">&times;</button>
+  <p><span class="am-icon-bullhorn"></span> <span id="notice"></span></p>
+</div>
+<ul class="am-avg-sm-4 am-padding am-text-center content-list">
+  <li><p class="am-text-success am-animation-scale-down"><span class="am-icon-btn am-success am-icon-file-text"></span><br>今日报修<br>{$stat.today}</p></li>
+  <li><p class="am-text-warning am-animation-scale-down"><span class="am-icon-btn am-warning am-icon-briefcase"></span><br>未维修<br>{$stat.todo}</p></li>
+  <li><p class="am-text-danger am-animation-scale-down"><span class="am-icon-btn am-danger am-icon-recycle"></span><br>维修中<br>{$stat.doing}</p></li>
+  <li><p class="am-text-secondary am-animation-scale-down"><span class="am-icon-btn am-secondary am-icon-user-md"></span><br>已维修<br>{$stat.done}</p></li>
+</ul>
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title">
+    最新报修
+    <a class="am-fr" href="javascript:;" id="refresh"><span class="am-icon-refresh"></span> 点击刷新</a>
+    </h3>    
+  </div>
+<table class="am-table am-table-hover am-text-center">
+	<tbody id="newest">
+	<foreach name="list" item="vo" >
+        <if condition="$vo.emerg eq 1"><tr class="am-active"><else/><tr></if>
+            <td>{$vo.order}</td>
+            <td class="am-show-md-up"><empty name="vo.building">-<else/>{:building($vo['area'],$vo['building'])}</empty></td>
+			<td class="am-show-md-up">{$vo.location}</td>
+			<td class="am-show-md-up">{:date('Y年m月d日',$vo['time'])}</td>
+			<td>
+			<switch name="vo.status" >
+			<case value="0">未维修</case>
+			<case value="1">维修中</case>
+			<case value="2">已维修</case>
+			</switch>
+			</td>
+			<td><a href="{:U('Report/detail',array('order'=>$vo['order']))}">详细&raquo;</a></td>
+        </tr>	
+    </foreach>		
+	</tbody>
+</table>
+</div>
+
+</div>
+<script>
+$(function($){
+	var count = 1;
+	var notice = new Array();
+	<foreach name="notice" item="vo" key="k" >
+	notice[{$k}] = '<a href="{:U('Article/index')}#{$vo.acid}">{$vo.title} <small>{:date('Y年m月d日',$vo['time'])}</small></a>';
+	</foreach>
+	$("#notice").html(notice[0]);
+	if(notice.length>1){
+	 	function Scroller(){
+			$("#notice").hide().html(notice[count]).fadeIn(500);
+			count++;
+	 		if(count==notice.length)count=0;		
+	 	}
+	 	setInterval(Scroller, 5000);
+	}
+});
+
+$('#refresh').click(function(){
+	$(this).html('<span class="am-icon-refresh am-icon-spin"></span> 正在刷新');
+	$.AMUI.progress.start();
+	$.ajax({
+			'url': "{:U('Main/refresh')}",
+			'cache': false,
+			'type':'get',
+			'dataType':'text',
+			success:function(res){
+				$('#newest').html(res);
+				$('#refresh').html('<span class="am-icon-refresh"></span> 点击刷新');
+				$.AMUI.progress.done();
+
+            },
+            error:function(res){
+            	$('#refresh').html('<span class="am-icon-refresh"></span> 刷新失败，点击重试');
+            }
+		});
+
+});
+
+  var timer = setInterval(function(){
+  	$('#refresh').click();
+  },30000);
+</script>
+<include file="Public/footer" />

@@ -1,0 +1,40 @@
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li><a href="{:U('Main/dashboard')}"><span class="am-icon-home"></span> 首页</a></li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#Task'}"><span class="am-icon-file"></span> 工单管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub" id="Task">
+            <li><a href="{:U('Task/todo')}" class="am-cf"><span class="am-icon-close"></span> 未处理<span class="am-badge am-badge-warning am-margin-right am-fr">{$countTodo}</span></a></li>
+            <li><a href="{:U('Task/doing')}"><span class="am-icon-circle-o"></span> 处理中<span class="am-badge am-badge-danger am-margin-right am-fr">{$countDoing}</span></a></li>
+            <li><a href="{:U('Task/done')}"><span class="am-icon-check"></span> 已处理</a></li>
+          </ul>
+        </li> 
+	    <li><a href="{:U('User/normal')}"><span class="am-icon-group"></span> 用户管理</a></li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#Article'}"><span class="am-icon-bullhorn"></span> 公告管理 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub" id="Article">
+            <li><a href="{:U('Article/add')}" class="am-cf"><span class="am-icon-plus"></span> 添加</a></li>
+            <li><a href="{:U('Article/index')}"><span class="am-icon-list"></span> 列表</a></li>
+          </ul>
+        </li>             
+        <li><a href="{:U('Main/user')}"><span class="am-icon-user"></span> 账户设置</a></li>
+        <li><a href="{:U('Main/setting')}"><span class="am-icon-sun-o"></span> 系统设置</a></li>
+        <li><a href="{:U('Main/logout')}"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 欢迎</p>
+          <p>欢迎登录重庆交通大学后勤在线服务中心后台!</p>
+        </div>
+      </div>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-tag"></span> 鸣谢</p>
+          <p>thinkPHP , amazeUI</p>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,171 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">处理中列表</strong> / <small>Table</small></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-6">
+        <div class="am-btn-toolbar">
+          <div class="am-btn-group am-btn-group-xs">
+            <button id="markTodo" type="button" class="am-btn am-btn-default"><span class="am-icon-save"></span> 标记为未处理</button>
+            <button id="markDone" type="button" class="am-btn am-btn-default"><span class="am-icon-archive"></span> 标记为已处理</button>
+            <button id="markDel" type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+          </div>
+        </div>
+      </div>
+      <div class="am-u-sm-12 am-u-md-3">
+        <div class="am-form-group">
+
+        </div>
+      </div>
+      <div class="am-u-sm-12 am-u-md-3">
+      <form>
+        <div class="am-input-group am-input-group-sm">
+          <input type="text" name="order" placeholder="输入工单号" class="am-form-field">
+          <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="submit">搜索</button>
+          </span>
+        </div>
+      </form>
+      </div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <form class="am-form">
+          <table class="am-table am-table-striped am-table-hover table-main">
+            <thead>
+              <tr>
+                <th class="table-check"><input type="checkbox" class="check-all"/></th>
+                <th class="table-type">工单号</th>
+                <th class="table-title am-hide-sm-only">区域</th>
+                <th class="table-type">楼栋</th>
+                <th class="table-author">寝室/地点</th>
+                <th class="table-date am-hide-sm-only">报修日期</th>
+                <th class="table-author am-hide-sm-only">报修人员</th>
+                <th class="table-author">报修物品</th>
+                <th class="table-id am-hide-sm-only">故障描述</th>
+              </tr>
+          </thead>
+          <tbody>
+          <foreach name="list" item="vo" key="k" >
+            <if condition="$vo.emerg eq 1"><tr class="am-active"><else/><tr></if>
+              <td><input class="ids" type="checkbox" name="order[]" value="{$vo.order}"/></td>
+              <td><a href="{:U('Home/Report/detail',array('order'=>$vo['order']))}" target="_blank">{$vo.order}</a></td>
+              <td class="am-hide-sm-only">{:area($vo['area'])}</td>
+              <td>{:empty($vo['building'])?'-':building($vo['area'],$vo['building'])}</td>
+              <td>{$vo.location}</td>
+              <td class="am-hide-sm-only">{:date('Y年m月d日 h:i:s',$vo['time'])}</td>
+              <td class="am-hide-sm-only">{$vo.user}</td>
+              <td>{:empty($vo['good'])?'-':$vo['good']}</td>     
+              <td class="am-hide-sm-only"><empty name="vo.description">无<else/>有</empty></td>
+            </tr>
+            </foreach>
+          </tbody>
+        </table>
+          <div class="am-cf">
+  共 {$count} 条记录
+  <div class="am-fr">
+{$page}
+  </div>
+</div>
+          <hr />
+          <p>后勤在线服务中心 Online Service Center</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <!-- content end -->
+</div>
+<script>
+  $(function(){
+  //全选的实现
+  $(".check-all").click(function(){
+    $(".ids").prop("checked", this.checked);
+  });
+  $(".ids").click(function(){
+    var option = $(".ids");
+    option.each(function(i){
+      if(!this.checked){
+        $(".check-all").prop("checked", false);
+        return false;
+      }else{
+        $(".check-all").prop("checked", true);
+      }
+    });
+  });  
+
+  $('#markTodo').click(function(){
+    $.ajax({
+      'type':'post',
+      'url':"{:U('Task/todo')}",
+      'data':$('form').serialize(),
+      'dataType':'text',
+      success:function(res){
+          if(res==1){
+            alert('标记[未处理]成功');
+            window.location.reload();
+          }else{
+            alert('标记失败');
+          }
+      },
+      error:function(res){
+          alert('连接失败');
+      }
+    });
+  });
+
+  $('#markDone').click(function(){
+    $.ajax({
+      'type':'post',
+      'url':"{:U('Task/done')}",
+      'data':$('form').serialize(),
+      'dataType':'text',
+      success:function(res){
+          if(res==1){
+            alert('标记[已处理]成功');
+            window.location.reload();
+          }else{
+            alert('标记失败');
+          }
+      },
+      error:function(res){
+          alert('连接失败');
+      }
+    });
+  });
+
+  $('#markDel').click(function(){
+    $.ajax({
+      'type':'post',
+      'url':"{:U('Task/del')}",
+      'data':$('form').serialize(),
+      'dataType':'text',
+      success:function(res){
+          if(res>0){
+            alert('删除成功');
+            window.location.reload();
+          }else{
+            alert('标记失败');
+          }
+      },
+      error:function(res){
+          alert('连接失败');
+      }
+    });
+  });    
+  })
+</script>
+<include file="Public/footer" />

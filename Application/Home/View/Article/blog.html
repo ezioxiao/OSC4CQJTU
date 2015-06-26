@@ -1,0 +1,108 @@
+<include file="Public/header" />
+  <style>
+    @media only screen and (min-width: 1200px) {
+      .blog-g-fixed {
+        max-width: 1200px;
+      }
+    }
+
+    @media only screen and (min-width: 641px) {
+      .blog-sidebar {
+        font-size: 1.4rem;
+      }
+    }
+
+    .blog-main {
+      padding: 20px 0;
+    }
+
+    .blog-title {
+      margin: 10px 0 20px 0;
+    }
+
+    .blog-meta {
+      font-size: 14px;
+      margin: 10px 0 20px 0;
+      color: #222;
+    }
+
+    .blog-meta a {
+      color: #27ae60;
+    }
+
+    .blog-pagination a {
+      font-size: 1.4rem;
+    }
+
+    .blog-team li {
+      padding: 4px;
+    }
+
+    .blog-team img {
+      margin-bottom: 0;
+    }
+
+    .blog-content img,
+    .blog-team img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .blog-footer {
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    .am-article-title{
+      overflow-x: visible;
+    }
+  </style>
+</head>
+<body>
+<include file="Public/nav" />
+
+<div class="am-g am-g-fixed blog-g-fixed">
+  <div class="am-u-md-8">
+  {$page}
+   <foreach name="list" item="value" key="key">
+    <article class="blog-main" id="{$value['acid']}">
+      <h3 class="am-article-title blog-title">
+        <a href="{:U('Article/show',array('acid'=>$value['acid']))}">{$value['title']}</a>
+      </h3>
+      <h4 class="am-article-meta blog-meta">posted on {:date('Y年m月d日',$value['time'])} , {$value['view']} views</h4>
+      <div class="am-g blog-content">
+        <div class="am-u-sm-12">
+          <p>{:mb_substr(strip_tags(htmlspecialchars_decode($value['content'])),0,150,'utf-8')}...
+          </p>
+          <a class="am-btn am-btn-primary am-round" href="{:U('Article/show',array('acid'=>$value['acid']))}">阅读全文&raquo;</a>
+        </div>
+      </div>
+    </article>
+    <hr class="am-article-divider blog-hr">
+   </foreach>
+  {$page}
+  </div>
+
+  <div class="am-u-md-4 blog-sidebar">
+    <div class="am-panel-group" data-am-sticky>
+      <section class="am-panel am-panel-default">
+        <div class="am-panel-hd">关于我</div>
+        <div class="am-panel-bd">
+          <p>重庆交通大学后勤服务总公司是重庆交通大学直属单位，成立于2000年，下设有物管公司、能源中心、饮食管理公司、交大驾校、双福校区分公司等部门，现有员工1800人。</p>
+          <a class="am-btn am-btn-success am-btn-sm" href="//www2.cqjtu.edu.cn/hq">查看更多 →</a>
+        </div>
+      </section>
+      <section class="am-panel am-panel-default">
+        <div class="am-panel-hd">本页文章</div>
+        <ul class="am-list blog-list">
+         <foreach name="list" item="value" key="key">
+          <li><a href="#{$value['acid']}">{$value['title']}</a></li>
+         </foreach>           
+        </ul>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+<include file="Public/footer" />

@@ -1,0 +1,207 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>一些常用模块</small></div>
+    </div>
+
+    <ul class="am-avg-sm-1 am-avg-md-4 am-margin am-padding am-text-center admin-content-list ">
+      <li><a href="#" class="am-text-success"><span class="am-icon-btn am-icon-file-text"></span><br/>今日报修<br/>{$countToday}</a></li>
+      <li><a href="#" class="am-text-warning"><span class="am-icon-btn am-icon-briefcase"></span><br/>未处理<br/>{$countTodo}</a></li>
+      <li><a href="#" class="am-text-danger"><span class="am-icon-btn am-icon-recycle"></span><br/>处理中<br/>{$countDoing}</a></li>
+      <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br/>已处理<br/>{$countDone}</a></li>
+    </ul>
+
+    <div class="am-padding">
+      <div id="myChart" style="height:400px"></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <div class="am-panel am-panel-default">
+          <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-0'}">紧急报修<span class="am-icon-chevron-down am-fr" ></span></div>
+          <div class="am-panel-bd am-collapse am-in" id="collapse-panel-0">
+            <ul class="am-list admin-content-task">
+            <empty name="list">
+            暂无紧急报修
+            <else/>
+            <foreach name="list" item="vo" key="k" >
+              <li>
+                <div class="admin-task-meta"> Posted on {:date('Y/m/d',$vo['time'])} by {$vo.user} 
+                <switch name="vo.status">
+                <case value="0"><span class="am-badge am-badge-warning">未处理</span></case>
+                <case value="1"><span class="am-badge am-badge-danger">处理中</span></case>
+                <case value="2"><span class="am-badge am-badge-primary">已处理</span></case>
+                </switch>
+                </div>
+                <div class="admin-task-bd">
+                  {$vo.description}
+                </div>
+                <div class="am-cf">
+                  <div class="am-btn-toolbar am-fl">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button type="button" class="am-btn am-btn-default markDoing" data-am-popover="{content: '标记处理中', trigger: 'hover'}" data-id="{$vo.order}"><span class="am-icon-check"></span></button>
+                      <button type="button" class="am-btn am-btn-default markDone" data-am-popover="{content: '标记已完成', trigger: 'hover'}" data-id="{$vo.order}"><span class="am-icon-circle-o"></span></button>
+                      <button type="button" class="am-btn am-btn-default markDel" data-am-popover="{content: '删除', trigger: 'hover'}" data-id="{$vo.order}"><span class="am-icon-times"></span></button>
+                    </div>
+                  </div>
+                  <div class="am-fr">
+                    <button type="button" class="am-btn am-btn-default am-btn-xs" onclick="window.open('{:U('Home/Report/detail',array('order'=>$vo['order']))}')">详细&raquo;</button>
+                  </div>
+                </div>
+              </li>
+              </foreach>
+              </empty>
+            </ul>        
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <!-- content end -->
+
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/assets/js/echarts.js"></script>
+<script>
+option = {
+    title : {
+        text: '每日工单情况统计',
+        subtext: '7日内'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['未处理','处理中','已处理']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : {$stat.category}
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        {
+            name:'未处理',
+            type:'line',
+            smooth:true,
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+            data:{$stat.todo}
+        },
+        {
+            name:'处理中',
+            type:'line',
+            smooth:true,
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+            data:{$stat.doing}
+        },
+        {
+            name:'已处理',
+            type:'line',
+            smooth:true,
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+            data:{$stat.done}
+        }
+    ]
+
+};
+var myChart = echarts.init(document.getElementById('myChart'));
+myChart.setOption(option);
+
+$(window).resize(function(){
+    myChart.resize();    
+});
+
+$('.markDoing').click(function(){
+  $.ajax({
+      'url': "{:U('Task/doing')}",
+      'cache': false,
+      'data':{order:$(this).data('id')},
+      'type':'post',
+      'dataType':'text',
+      success:function(res){
+          if(res==1){
+            alert('标记[处理中]成功');
+            window.location.reload();
+          }else{
+            alert('标记失败');
+          }
+        },
+      error:function(res){
+        alert('连接超时');
+      }
+  });
+});
+
+$('.markDone').click(function(){
+  $.ajax({
+      'url': "{:U('Task/done')}",
+      'cache': false,
+      'data':{order:$(this).data('id')},
+      'type':'post',
+      'dataType':'text',
+      success:function(res){
+          if(res==1){
+            alert('标记[已处理]成功');
+            window.location.reload();
+          }else{
+            alert('标记失败');
+          }
+        },
+      error:function(res){
+        alert('连接超时');
+      }
+  });
+});
+
+$('.markDel').click(function(){
+  $.ajax({
+      'url': "{:U('Task/del')}",
+      'cache': false,
+      'data':{order:$(this).data('id')},
+      'type':'post',
+      'dataType':'text',
+      success:function(res){
+          if(res==1){
+            alert('删除成功');
+            window.location.reload();
+          }else{
+            alert('删除失败');
+          }
+        },
+      error:function(res){
+        alert('连接超时');
+      }
+  });
+});
+
+</script>
+<include file="Public/footer" />

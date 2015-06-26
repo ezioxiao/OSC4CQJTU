@@ -1,0 +1,83 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+  
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">密码修改</strong> / <small>Password change</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+
+      <div class="am-u-sm-12">
+        <form method="post" id="doc-vld-msg" class="am-form">
+        <fieldset>
+          <div class="am-form-group">
+            <label for="o-password" class="am-form-label">原密码</label>
+            <div class="">
+              <input type="password" name="o-password" id="o-password" placeholder="输入你的原密码" required>
+              <small></small>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="n-password" class="am-form-label">新密码</label>
+            <div class="">
+              <input type="password" name="n-password" minlength="6" maxlength="20" id="n-password" placeholder="输入你的新密码" required>
+              <small></small>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <label for="rn-password" class="am-form-label">确认新密码</label>
+            <div class="">
+              <input type="password" id="rn-password" placeholder="再次输入你的新密码" data-equal-to="#n-password" required>
+            </div>
+          </div>
+
+          <div class="am-form-group">
+            <div class="">
+              <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+            </div>
+          </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- content end -->
+
+</div>
+<script>
+$(function() {
+  $('#doc-vld-msg').validator({
+    onValid: function(validity) {
+      $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+    },
+
+    onInValid: function(validity) {
+      var $field = $(validity.field);
+      var $group = $field.closest('.am-form-group');
+      var $alert = $group.find('.am-alert');
+      // 使用自定义的提示信息 或 插件内置的提示信息
+      var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+
+      if (!$alert.length) {
+        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+      }
+
+      $alert.html(msg).show();
+    }
+  });
+});
+</script>
+<include file="Public/footer" />

@@ -1,0 +1,48 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">添加公告</strong> / <small>Add</small></div>
+    </div>
+
+    <form method="post" class="am-form am-form-horizontal">
+      <fieldset>
+	    <div class="am-form-group">
+	      <label for="doc-ipt-text-1" class="am-u-sm-2 am-form-label">标题</label>
+	      <div class="am-u-sm-10">
+	      	<input type="text" class="" name="title" id="doc-ipt-text-1" placeholder="请输入标题" required>
+	      </div>
+	    </div>
+
+		<script class="am-padding" id="container" name="content" style="width:100%;height:500px" type="text/plain">
+
+	    </script>	
+
+	      <div class="am-btn-group am-btn-group-justify am-cf am-padding">
+	        <input type="submit" name="submit" value="添 加" class="am-btn am-btn-primary am-radius am-fl">
+	        <input type="reset" name="" value="清 空" class="am-btn am-btn-default am-radius am-fr">
+	      </div>
+	  </fieldset>
+	</form>
+  </div>
+  <!-- content end -->
+</div>
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+<script>
+$(function(){
+	var ue = UE.getEditor('container',{
+	    serverUrl :'{:U('Admin/Article/ueditor')}'
+	});
+})
+</script>
+<include file="Public/footer" />

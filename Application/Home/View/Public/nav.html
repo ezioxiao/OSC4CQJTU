@@ -1,0 +1,85 @@
+<style>
+  .topbar-fix {
+    margin-bottom : 0
+  }
+
+  .banner {
+    background: #1E5B94 url("__PUBLIC__/resource/images/index_banner.gif") no-repeat;
+    background-size: cover;
+    background-position: right;
+    color: #fff;
+    text-align: right;
+    padding: 30px 0;    
+  }
+
+  .banner-title {
+    font-size: 200%;
+    padding: 20px;
+    display: inline-block;
+  }
+</style>
+<header class="am-topbar topbar-fix">
+<div class="am-container">
+
+    <div class="am-topbar-right">
+      <if condition="!session('?uid')">
+      <button onclick="location.href='{:U('User/login')}'" class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-round"><span class="am-icon-user"></span> 用户登录</button>
+      <else/>
+      <ul class="am-nav am-nav-pills am-topbar-nav">
+        <li class="am-dropdown" data-am-dropdown><a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">{:session('?username')===true?session('username'):session('uid')} <span class="am-icon-caret-down"></span></a>
+        <ul class="am-dropdown-content">
+          <li><a href="{:U('User/order')}"><span class="am-icon-history"></span> 报修记录</a></li>
+          <li class="am-divider"></li>
+          <li><a href="{:U('User/setting')}"><span class="am-icon-cog"></span> 账户设置</a></li>
+          <li class="am-divider"></li>
+          <li><a href="{:U('User/logout')}"><span class="am-icon-sign-out"></span> 注销</a></li>
+        </ul>
+        </li>
+      </ul>
+      </if>
+    </div>	
+
+</div>  
+</header>
+
+<div class="banner">
+  <div class="am-g">
+    <div class="am-u-lg-12">
+      <h1 class="banner-title">后勤在线服务中心 <small>Online Service Center</small></h1>
+    </div>
+  </div>
+</div>
+
+<header class="am-topbar">
+<div class="am-container">
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#action-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="action-topbar-collapse">
+    <ul class="am-nav am-nav-pills am-topbar-nav">
+      <li><a href="{:U('Main/index')}">首页</a></li>
+	  <li><a href="{:U('List/index')}">报修列表</a></li>	
+      <li class="am-dropdown" data-am-dropdown>
+      <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">我要报修 <span class="am-icon-caret-down"></span></a>
+        <ul class="am-dropdown-content">
+          <li><a href="{:U('Report/index')}">普通报修</a></li>
+          <li><a href="{:U('Report/emerg')}">紧急报修</a></li>
+        </ul>
+      </li>	
+      <li><a href="{:U('Article/index')}">通知公告</a></li>
+    </ul>
+	
+    <div class="am-topbar-right">
+		<form action="{:U('List/Search')}" class="am-topbar-form am-topbar-left am-form-inline" role="search" method="post">
+		  <div class="am-input-group">
+			<input type="text" name="order" class="am-form-field am-input-sm am-radius" placeholder="工单搜索">
+			  <span class="am-input-group-btn">
+				<button class="am-btn am-btn-default am-radius" type="submit"><span class="am-icon-search"></span></button>
+			  </span>
+		  </div>
+		</form>
+    </div>
+
+  </div>
+</div>
+</header>

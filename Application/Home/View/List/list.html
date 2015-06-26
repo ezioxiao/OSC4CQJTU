@@ -1,0 +1,78 @@
+<include file="Public/header" />
+
+<include file="Public/nav" />
+
+<style>
+.am-table {
+	margin-bottom: 0;
+}
+.filter span:hover {
+	background-color: #19a7f0;
+}
+</style>
+
+<div class="am-container">
+
+<div class="am-g filter">
+ 	<div class="am-u-md-6">
+	<h3>报修类型</h3>
+		<a href="{:U('List/index',array('status'=>I('param.status')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.emerg') eq null">am-badge-success</if>
+		">所有</span></a>
+		<a href="{:U('List/index',array('emerg'=>0,'status'=>I('param.status')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.emerg') eq '0'">am-badge-success</if>
+		">普通</span></a>
+		<a href="{:U('List/index',array('emerg'=>1,'status'=>I('param.status')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.emerg') eq '1'">am-badge-success</if>
+		">紧急</span></a>
+	</div>
+
+	<div class="am-u-md-6">
+	<h3>报修状态</h3>
+		<a href="{:U('List/index',array('emerg'=>I('param.emerg')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.status') eq null">am-badge-primary</if>
+		">所有</span></a>
+		<a href="{:U('List/index',array('status'=>0,'emerg'=>I('param.emerg')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.status') eq '0'">am-badge-primary</if>
+		">未维修</span></a>
+		<a href="{:U('List/index',array('status'=>1,'emerg'=>I('param.emerg')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.status') eq '1'">am-badge-primary</if>
+		">维修中</span></a>
+		<a href="{:U('List/index',array('status'=>2,'emerg'=>I('param.emerg')))}"><span class="am-badge am-text-default am-radius
+		<if condition="I('param.status') eq '2'">am-badge-primary</if>
+		">已维修</span></a>
+ 	</div>
+</div>
+
+<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title">报修列表</h3>
+  </div>
+<table class="am-table am-text-center am-table-hover">
+	<tbody>
+	<foreach name="list" item="vo" >
+        <if condition="$vo.emerg eq 1"><tr class="am-active"><else/><tr></if>
+            <td>{$vo.order}</td>
+            <td class="am-show-md-up"><empty name="vo.building">-<else/>{$vo.good}</empty></td>
+            <td class="am-show-md-up"><empty name="vo.building">-<else/>{:building($vo['area'],$vo['building'])}</empty></td>
+			<td class="am-show-md-up">{$vo.location}</td>
+			<td class="am-show-md-up">{$vo.uid}</td>
+			<td class="am-show-md-up">{:date('Y年m月d日',$vo['time'])}</td>
+			<td>
+			<switch name="vo.status" >
+			<case value="0">未维修</case>
+			<case value="1">维修中</case>
+			<case value="2">已维修</case>
+			</switch>
+			</td>
+			<td><a href="{:U('Report/detail',array('order'=>$vo['order']))}">详细&raquo;</a></td>
+        </tr>	
+    </foreach>		
+	</tbody>
+</table>
+</div>
+{$page}
+</div>
+<include file="Public/footer" />

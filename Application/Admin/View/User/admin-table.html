@@ -1,0 +1,106 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">用户列表</strong> / <small>Table</small></div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12 am-u-md-6">
+        <div class="am-btn-toolbar">
+          <div class="am-btn-group am-btn-group-xs">
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-file-excel-o"></span> 导出</button>
+            <button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+          </div>
+        </div>
+      </div>
+      <div class="am-u-sm-12 am-u-md-3">
+        <div class="am-form-group">
+        </div>
+      </div>
+      <div class="am-u-sm-12 am-u-md-3">
+        <div class="am-input-group am-input-group-sm">
+          <input type="text" class="am-form-field">
+          <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="button">搜索</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+        <form class="am-form">
+          <table class="am-table am-table-striped am-table-hover table-main">
+            <thead>
+              <tr>
+                <th class="table-check"><input type="checkbox" class="check-all" /></th><th class="table-id">学号</th><th class="table-title">校区</th><th class="table-type">楼栋</th><th class="table-author am-hide-sm-only">寝室</th><th class="table-date am-hide-sm-only">联系电话</th><th class="table-set">操作</th>
+              </tr>
+          </thead>
+          <tbody>
+            <foreach name="list" item="vo" >
+            <tr>
+              <td><input type="checkbox" class="ids" name="uid[]"/></td>
+              <td>{$vo.uid}</td>
+              <td>{:area($vo['area'])}</td>
+              <td>{:building($vo['area'],$vo['building'])}</td>
+              <td class="am-hide-sm-only">{$vo.location}</td>
+              <td class="am-hide-sm-only">{$vo.tel}</td>
+              <td>
+                <div class="am-btn-toolbar">
+                  <div class="am-btn-group am-btn-group-xs">
+                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                    <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
+                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </foreach>
+          </tbody>
+        </table>
+          <div class="am-cf">
+  共 {$count} 条记录
+  <div class="am-fr">
+{$page}
+  </div>
+</div>
+          <hr />
+          <p>后勤在线服务中心 Online Service Center</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <!-- content end -->
+</div>
+<script>
+$(function(){
+  //全选的实现
+  $(".check-all").click(function(){
+    $(".ids").prop("checked", this.checked);
+  });
+  $(".ids").click(function(){
+    var option = $(".ids");
+    option.each(function(i){
+      if(!this.checked){
+        $(".check-all").prop("checked", false);
+        return false;
+      }else{
+        $(".check-all").prop("checked", true);
+      }
+    });
+  });
+});
+</script>
+<include file="Public/footer" />

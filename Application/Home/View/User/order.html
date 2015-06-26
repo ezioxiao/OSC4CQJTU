@@ -1,0 +1,34 @@
+<include file="Public/header" />
+<include file="Public/nav" />
+<div class="am-container">
+
+<div class="am-panel am-panel-default">
+  <div class="am-panel-hd">
+    <h3 class="am-panel-title">报修记录</h3>
+  </div>
+<table class="am-table am-table-hover am-text-center">
+	<tbody>
+  <foreach name="list" item="vo" >
+        <if condition="$vo.emerg eq 1"><tr class="am-active"><else/><tr></if>
+            <td>{$vo.order}</td>
+            <td class="am-show-md-up">{$vo.good}</td>
+            <td class="am-show-md-up">{$vo.building}</td>
+            <td class="am-show-md-up">{$vo.location}</td>
+            <td class="am-show-md-up">{:date('Y年m月d日',$vo['time'])}</td>
+            <td>
+            <switch name="vo.status" >
+            <case value="0">未维修</case>
+            <case value="1">维修中</case>
+            <case value="2">已维修</case>
+            </switch>
+            </td>
+            <td><a href="{:U('Report/detail',array('order'=>$vo['order']))}">详细&raquo;</a></td>
+        </tr> 
+    </foreach>	
+	</tbody>
+</table>
+</div>
+{$page}
+</div>
+
+<include file="Public/footer" />

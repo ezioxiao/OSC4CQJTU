@@ -1,0 +1,141 @@
+<include file="Public/header" />
+<style type="text/css">
+	.controls a{border-left:1px #DDD solid; margin-left:10px; padding-left:10px; color:#333;}
+</style>
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">系统设置</strong> / <small>System setting</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-container">
+
+    	<div class="am-panel am-panel-default">
+		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#set'}">个性设置<span class="am-icon-chevron-down am-fr" ></span></div>
+		  <div class="am-panel-bd am-collapse am-in" id="set"> 
+		  </div>   		
+    	</div>
+
+		<div class="am-panel am-panel-default">
+		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#designer'}">区域/楼栋设计器<span class="am-icon-chevron-down am-fr" ></span></div>
+		  <div class="am-panel-bd am-collapse" id="designer">
+		  	<form method="post" class="am-form">
+	        <div class="controls">
+	        	<if condition="empty($area) or empty($building)">
+	            <div class="controls">
+	                <label>名称：
+	                <input name="config[menu][button][0][name]" type="text" required></label> 
+	                <span class="check-tips"><a class="am-icon-arrows" title="拖动调整此菜单位置" href="javascript:;"></a></span> 
+	                <span class="check-tips"><a class="add-button am-icon-plus" title="添加一级菜单" href="javascript:;"></a></span> 
+	                <span class="check-tips"><a class="remove-button am-icon-close" title="删除一级菜单" href="javascript:;"></a></span>
+	                <div class="children">
+	                	<a class="am-icon-arrows" title="拖动调整此菜单位置" href="javascript:;"></a>
+	                    <a class="add-sub-cate am-icon-plus" title="添加二级菜单" href="javascript:;"></a> 
+	                    <a class="remove-sub-cate am-icon-close" title="删除二级菜单" href="javascript:;"></a>
+	                    </label>
+	                    <label>名称： 
+	                    <input type="text" name="config[menu][button][0][sub_button][0][name]" class="text input-large" required></label>
+	                    <label>标识： 
+	                    <input type="text" name="config[menu][button][0][sub_button][0][key]" class="text input-large" required></label>
+	                </div>
+	            </div>
+	        	<else/>
+	        	<foreach name="area" item="vo" key="k" >
+	            <div class="controls">
+	                <label>名称：
+	                <input name="config[menu][button][{$k}][name]" type="text" value="{$vo}" required></label> 
+	                <a class="am-icon-arrows" title="拖动调整此菜单位置" href="javascript:;"></a>
+	                <span class="check-tips"><a class="add-button am-icon-plus" title="添加一级菜单" href="javascript:;"></a></span> 
+	                <span class="check-tips"><a class="remove-button am-icon-close" title="删除一级菜单" href="javascript:;"></a></span>
+	                <foreach name="building[$k]" item="value" key="key" >
+	                <div class="children">
+	                	<a class="am-icon-arrows" title="拖动调整此菜单位置" href="javascript:;"></a>
+	                    <a class="add-sub-cate am-icon-plus" title="添加二级菜单" href="javascript:;"></a>
+	                    <a class="remove-sub-cate am-icon-close" title="删除二级菜单" href="javascript:;"></a>
+	                    <a></a>  
+	                    </label>
+	                    <label>名称： 
+	                    <input type="text" name="config[menu][button][{$k}][sub_button][{$key}][name]" class="text input-large" value="{$value.name}" required></label>
+	                    <label>标识： 
+	                    <input type="text" name="config[menu][button][{$k}][sub_button][{$key}][key]" class="text input-large" value="{$value.key}" required></label>
+	                </div>
+	                </foreach>
+	            </div>
+	            <hr>
+	            </foreach>
+	            </if>
+	        </div><!-- controls end -->		
+        	<button type="submit" class="am-btn am-btn-block">确 定</button>
+		    </form>
+		  </div>
+		  <div class="am-panel-footer">可以使用 <i class="am-icon-arrows"></i> 进行拖动排序</div>  	
+    	</div>
+
+       <hr />
+       <p>后勤在线服务中心 Online Service Center</p>
+  	</div>
+  <!-- content end -->
+  </div>
+</div>
+<script src="__PUBLIC__/resource/js/jquery-ui.min.js"></script>
+<script>
+$(function() {
+	$('.controls').sortable({handle: '.am-icon-arrows'});
+});
+
+		$(document).delegate('.add-button',"click",function(){
+			var c = '.controls',cn = '.children';
+			var t = $(this).parents(c).html();
+			var l = $(this).parents(c).parent(c).find(c).length;
+			var a = $(this).parents(c).find(cn).first().html();
+			console.log(a);
+			var s = parseInt($(this).parents(c).parent(c).find(c).last().html().match(/\[button\]\[(\d+)\]/i)[1]);
+			
+			
+			s = (s<1)?0:s;
+			t = t.replace(/(<a[\s\S]+?)(add-button)([\s\S]+?)(添加一级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-button$3删除一级菜单$5$6 icon-remove$7");
+			t = t.replace(/(<div[\s\S]+?class="children")([\s\S]+?)(<\/div>)/g, '');
+			t = t+'<div class="children">'+a+'</div>';
+			t = t.replace(/(\[button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+			t = t.replace(/(\[sub_button\]\[)(\d+)(\])/g, "$1"+(0).toString()+"$3");
+			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+			//if(l < 3){
+				$($(this).parents(c).parent(c)).append('<div class="controls">'+t+'</div>');
+			//}
+			return false;
+		})
+		$(document).delegate('.add-sub-cate',"click",function(){
+			var c = '.controls',cn = '.children';
+			var t = $(this).parent(cn).html();
+			var l = $(this).parent(cn).parent(c).find(cn).length;
+			var s = parseInt($(this).parent(cn).parent(c).find(cn).last().html().match(/sub_button\]\[(\d+)\]/i)[1]);
+			s = (s<1)?0:s;
+			t = t.replace(/(<a[\s\S]+?)(add-sub-cate)([\s\S]+?)(添加二级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-sub-cate$3删除二级菜单$5$6 icon-remove$7");
+			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+			t = t.replace(/(sub_button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+			//if(l < 5){
+			$($(this).parent(cn).parent(c)).append('<div class="children">'+t+'</div>');
+			//}
+
+			return false;
+		})
+		$(document).delegate(".remove-sub-cate","click",function(){
+		  	$(this).parent('.children').remove();
+		});
+		$(document).delegate(".remove-button","click",function(){
+		  	$(this).parent('.check-tips').parent('.controls').remove();
+		});
+
+</script>
+<include file="Public/footer" />

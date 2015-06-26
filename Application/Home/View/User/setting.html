@@ -1,0 +1,87 @@
+<include file="Public/header" />
+<link rel="stylesheet" href="__PUBLIC__/assets/css/amazeui.chosen.css"/>
+<include file="Public/nav" />
+
+<div class="am-container">
+<div class="am-alert am-alert-default" data-am-alert>
+  <button type="button" class="am-close">&times;</button>
+  <p>设置个人信息后在报修时无需再次输入。</p>
+</div>
+<form action="" method="post" class="am-form" data-am-validator>
+  <fieldset>
+    <div class="am-form-group">
+      <label>报修区域：</label>
+      <select id="province" name="area" required>
+        <option value="载入中">载入中</option>
+      </select>                     
+    </div>
+
+    <div class="am-form-group">
+      <label>报修楼栋：</label>
+      <select id="city" name="building" required>
+        <option value="载入中">载入中</option>
+      </select>        
+    </div>
+
+    <div class="am-form-group">
+      <label for="report-2">常驻寝室：</label>
+      <input type="text" id="report-2" name="location" placeholder="请输入寝室号" value="{$user['location']}" required/>
+    </div>
+
+    <div class="am-form-group">
+      <label for="report-3">联系电话：</label>
+      <input type="text" name="tel" id="report-3" value="{$user['tel']}" placeholder="请输入联系电话" required/>
+    </div>
+
+    <button class="am-btn am-btn-success am-btn-block am-radius" type="submit">提 交</button>
+  </fieldset>
+</form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/assets/js/jquery.city.select.js"></script>
+<script type="text/javascript">
+$(function () {
+
+    var data = {$data};
+
+    $('#province, #city').citylist({data:data, id:'id', children:'citys',name:'name',metaTag:'name'});
+    window.prettyPrint && prettyPrint();
+});
+
+  if ($.AMUI && $.AMUI.validator) {
+    $.AMUI.validator.patterns.mobile = /^\s*1\d{10}\s*$/;
+  }
+
+  $('form').validator({
+    onValid: function(validity) {
+      $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+    },
+
+    onInValid: function(validity) {
+      var $field = $(validity.field);
+      var $group = $field.closest('.am-form-group');
+      var $alert = $group.find('.am-alert');
+      // 使用自定义的提示信息 或 插件内置的提示信息
+      var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+
+      if (!$alert.length) {
+        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+      }
+
+      $alert.html(msg).show();
+    }
+  });
+
+  var timer = setInterval(function(){
+    $('#province').find('option[value="{$user['area']}"]').attr('selected', 'selected');
+    if (!$.AMUI.support.mutationobserver) {
+      $('#province').trigger('changed.selected.amui');
+    }
+    $('#city').find('option[value="{$user['building']}"]').attr('selected', 'selected');
+    if (!$.AMUI.support.mutationobserver) {
+      $('#city').trigger('changed.selected.amui');
+    }    
+    clearInterval(timer);
+  },100);
+</script>
+<include file="Public/footer" />
