@@ -35,12 +35,32 @@ class UserController extends SimpleController {
 
     //用户注册
     public function register(){
-    	
+    	if(session('?uid'))$this->redirect('order');
+    	if(IS_POST){
+    		$database = M('user');
+            if (!$database->autoCheckToken($_POST)){
+                $this->error('令牌验证错误');
+            }             
+            if(!$this->checkVerify(I('post.verify'))){
+                $this->error('验证码错误',U('User/register'));
+            }
+            $data['uid'] = I('post.uid');
+            $salt = salt();
+            $data['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$salt);
+            $add = $database->data($data)->filter('strip_tags')->add();
+            if($add){
+            	$this->success('注册成功',U('User/login'));
+            }else{
+            	$this->error('注册失败');
+            }
+    	}else{
+    		$this->display('register');
+    	}
     }
 
     //找回密码
     public function findpsw(){
-    	
+
     }
 
     //用户注销

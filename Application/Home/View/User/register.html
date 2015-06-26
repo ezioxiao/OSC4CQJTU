@@ -2,21 +2,26 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-    <form method="post" class="am-form">
+    <form method="post" class="am-form" data-am-validator>
+    <fieldset>
       <label for="email">一卡通卡号:</label>
       <input type="text" name="uid" id="email" value="" required>
       <br>
       <label for="password">一卡通密码:</label>
       <input type="password" name="password" id="password" value="" required>
       <br>
+      <label for="password">确认密码:</label>
+      <input type="password" placeholder="请与上面输入的值一致" data-equal-to="#password" required>
+      <br>
       <label for="password">验证码:</label>
       <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">
       <input type="text" name="verify" id="verify" value="" required>
       <br>    
       <div class="am-btn-group am-btn-group-justify am-cf">
-        <input type="submit" value="登 录" class="am-btn am-btn-primary am-radius am-fl">
-        <input type="button" onclick="window.location.href='{:U('User/login')}'" value="注 册" class="am-btn am-btn-default am-radius am-fr">
+        <input type="submit" value="注 册" class="am-btn am-btn-primary am-radius am-fl">
+        <input type="button" onclick="window.location.href='{:U('User/login')}'" value="登 录" class="am-btn am-btn-default am-radius am-fr">
       </div>
+    </fieldset>
     </form>
 </div>
 
