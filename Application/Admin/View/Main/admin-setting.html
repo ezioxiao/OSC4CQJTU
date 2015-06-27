@@ -21,16 +21,87 @@
 
     <div class="am-container">
 
-    	<div class="am-panel am-panel-default">
-		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#set'}">个性设置<span class="am-icon-chevron-down am-fr" ></span></div>
+    	<!--<div class="am-panel am-panel-default">
+		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#set'}">全局设置<span class="am-icon-chevron-down am-fr" ></span></div>
 		  <div class="am-panel-bd am-collapse am-in" id="set"> 
-		  </div>   		
+			<form action="{:U('Main/setGlobal')}" method="post" class="am-form am-form-horizontal">
+		    <div class="am-form-group">
+		      <label for="doc-select-1">是否开放站点</label>
+		      <select id="doc-select-1" name="isOpenWebsite">
+		        <option value="true">是</option>
+		        <option value="false">否</option>
+		      </select>
+		      <span class="am-form-caret"></span>
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="doc-select-2">是否开放注册</label>
+		      <select id="doc-select-2" name="isAllowRegister">
+		        <option value="true">是</option>
+		        <option value="false">否</option>
+		      </select>
+		      <span class="am-form-caret"></span>
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="doc-select-3">是否限定报修时段</label>
+		      <select id="doc-select-3" name="isLimitTime">
+		        <option value="true">是</option>
+		        <option value="false">否</option>
+		      </select>
+		      <span class="am-form-caret"></span>
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="doc-ipt-1">报修时段</label>
+		      <div class="am-form-group">
+		      <label class="am-u-sm-1">开始</label>
+		      	<div class="am-u-sm-5"><input type="time" name="startTime"></div>
+		      <label class="am-u-sm-1">结束</label>
+		      	<div class="am-u-sm-5"><input type="time" name="endTime"></div>
+		      </div>
+		    </div>
+
+		    <button type="submit" class="am-btn am-btn-block">确 定</button>
+			</form>
+		  </div> 
+		  <div class="am-panel-footer">点击展开</div>  		
     	</div>
+
+    	<div class="am-panel am-panel-default">
+    	<div class="am-panel-hd am-cf" data-am-collapse="{target: '#tips'}">提示语设计<span class="am-icon-chevron-down am-fr" ></span></div>
+    	<div class="am-panel-bd am-collapse am-in" id="tips">
+    		<form action="{:U('Main/setTips')}" method="post" class="am-form am-form-horizontal">
+		    <div class="am-form-group">
+		      <label for="doc-ta-1">用户登录页面提示</label>
+		      <textarea class="" rows="5" id="doc-ta-1"></textarea>
+		    </div>
+		    <div class="am-form-group">
+		      <label for="doc-ta-2">用户注册页面提示</label>
+		      <textarea class="" rows="5" id="doc-ta-2"></textarea>
+		    </div>
+		    <div class="am-form-group">
+		      <label for="doc-ta-3">普通报修页面提示</label>
+		      <textarea class="" rows="5" id="doc-ta-3"></textarea>
+		    </div>		    
+		    <div class="am-form-group">
+		      <label for="doc-ta-4">紧急报修页面提示</label>
+		      <textarea class="" rows="5" id="doc-ta-4"></textarea>
+		    </div>
+		    <div class="am-form-group">
+		      <label for="doc-ta-5">工单详情页面提示</label>
+		      <textarea class="" rows="5" id="doc-ta-5"></textarea>
+		    </div>
+		    <button type="submit" class="am-btn am-btn-block">确 定</button>	    		    
+    		</form>
+		</div>
+    	<div class="am-panel-footer">点击展开</div>
+    	</div>-->
 
 		<div class="am-panel am-panel-default">
 		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#designer'}">区域/楼栋设计器<span class="am-icon-chevron-down am-fr" ></span></div>
-		  <div class="am-panel-bd am-collapse" id="designer">
-		  	<form method="post" class="am-form">
+		  <div class="am-panel-bd am-collapse am-in" id="designer">
+		  	<form method="post" class="am-form am-form-horizontal">
 	        <div class="controls">
 	        	<if condition="empty($area) or empty($building)">
 	            <div class="controls">
@@ -84,7 +155,7 @@
 
        <hr />
        <p>后勤在线服务中心 Online Service Center</p>
-  	</div>
+  	</div>	
   <!-- content end -->
   </div>
 </div>

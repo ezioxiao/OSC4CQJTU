@@ -23,7 +23,7 @@
           <div class="am-form-group">
             <label for="o-password" class="am-form-label">原密码</label>
             <div class="">
-              <input type="password" name="o-password" id="o-password" placeholder="输入你的原密码" required>
+              <input type="password" minlength="6" maxlength="20" name="o-password" id="o-password" placeholder="输入你的原密码" required>
               <small></small>
             </div>
           </div>
@@ -31,7 +31,7 @@
           <div class="am-form-group">
             <label for="n-password" class="am-form-label">新密码</label>
             <div class="">
-              <input type="password" name="n-password" minlength="6" maxlength="20" id="n-password" placeholder="输入你的新密码" required>
+              <input type="password" name="n-password" minlength="6" maxlength="20" id="n-password" placeholder="输入你的新密码6-20位" required>
               <small></small>
             </div>
           </div>
@@ -39,7 +39,7 @@
           <div class="am-form-group">
             <label for="rn-password" class="am-form-label">确认新密码</label>
             <div class="">
-              <input type="password" id="rn-password" placeholder="再次输入你的新密码" data-equal-to="#n-password" required>
+              <input type="password" id="rn-password" minlength="6" maxlength="20" placeholder="再次输入你的新密码" data-equal-to="#n-password" required>
             </div>
           </div>
 

@@ -2,13 +2,14 @@
 namespace Admin\Controller;
 use Think\Controller;
 class MainController extends SimpleController {
+    //登录
     public function index(){
         if(session('?admin'))$this->redirect('Main/dashboard');
     	if(IS_POST){
     		$database = M('admin');
-    		if (!$database->autoCheckToken($_POST)){
-    			$this->error('令牌验证错误',U('Main/index'));
-    		}	
+            if(!D("admin")->create()){
+                $this->error(D("admin")->getError(),U('Main/index')); 
+            } 	
 			if(!$this->checkVerify(I('post.verify'))){
 				$this->error('验证码错误',U('Main/index'));
 			}  
@@ -31,6 +32,7 @@ class MainController extends SimpleController {
     	}
     }	
 
+    //Echart.js 7天内统计数据
     public function dashboard(){
         if(!session('?admin'))$this->redirect('Main/index');
         $stat['category'] = json_encode(array(
@@ -71,19 +73,19 @@ class MainController extends SimpleController {
     	$this->display('admin-index');
     }
 
+    //密码修改
     public function user(){
         if(!session('?admin'))$this->redirect('Main/index');
         if(IS_POST){
             $database = M('admin');
-    		if (!$database->autoCheckToken($_POST)){
-    			$this->error('令牌验证错误',U('Main/user'));
-    		}            
+            if (!$database->autoCheckToken($_POST)){
+                $this->error('令牌验证错误',U('Main/setting'));
+            }           
             $bind[':username'] = session('admin');
             $admin = $database->where('username=:username')->bind($bind)->find();
             if(empty($admin))$this->error('用户不存在');
-            $bind[':password'] = I('post.password');
             $data['password'] = sha1(C('DB_PREFIX').I('post.n-password').'_'.$admin['salt']);
-            $update = $database->where('username=:username and password=:password')->bind($bind)->save($data);
+            $update = $database->where('username=:username')->bind($bind)->save($data);
             if($update){
                 $this->success('密码已更新',U('Main/user'));
             }else{
@@ -94,6 +96,7 @@ class MainController extends SimpleController {
         }
     }  
 
+    //系统设置
     public function setting(){
         if(!session('?admin'))$this->redirect('Main/index');
         $database = M('setting');
@@ -123,11 +126,13 @@ class MainController extends SimpleController {
         $this->display('admin-setting');
     }    
 
+    //注销
     public function logout(){
         session(null);
     	$this->redirect('Main/index');
     }
 
+    //中文验证码
     public function v(){
 		$Verify =     new \Think\Verify();
 		// 验证码字体使用 ThinkPHP/Library/Think/Verify/ttfs/5.ttf
