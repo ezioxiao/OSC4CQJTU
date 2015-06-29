@@ -73,9 +73,13 @@
 $(function($){
 	var count = 1;
 	var notice = new Array();
+	<empty name="notice">
+	notice[0] = '暂无公告';
+	<else />
 	<foreach name="notice" item="vo" key="k" >
 	notice[{$k}] = '<a href="{:U('Article/index')}#{$vo.acid}">{$vo.title} <small>{:date('Y年m月d日',$vo['time'])}</small></a>';
 	</foreach>
+	</empty>
 	$("#notice").html(notice[0]);
 	if(notice.length>1){
 	 	function Scroller(){

@@ -21,14 +21,13 @@
 
     <div class="am-container">
 
-    	<!--<div class="am-panel am-panel-default">
+    	<div class="am-panel am-panel-default">
 		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#set'}">全局设置<span class="am-icon-chevron-down am-fr" ></span></div>
 		  <div class="am-panel-bd am-collapse am-in" id="set"> 
-<<<<<<< HEAD
 			<form action="{:U('Main/setGlobal')}" method="post" class="am-form am-form-horizontal">
 		    <div class="am-form-group">
 		      <label for="doc-select-1">是否开放站点</label>
-		      <select id="doc-select-1" name="isOpenWebsite">
+		      <select id="doc-select-1" name="global[isopen]">
 		        <option value="true">是</option>
 		        <option value="false">否</option>
 		      </select>
@@ -37,30 +36,11 @@
 
 		    <div class="am-form-group">
 		      <label for="doc-select-2">是否开放注册</label>
-		      <select id="doc-select-2" name="isAllowRegister">
+		      <select id="doc-select-2" name="global[allowregister]">
 		        <option value="true">是</option>
 		        <option value="false">否</option>
 		      </select>
 		      <span class="am-form-caret"></span>
-		    </div>
-
-		    <div class="am-form-group">
-		      <label for="doc-select-3">是否限定报修时段</label>
-		      <select id="doc-select-3" name="isLimitTime">
-		        <option value="true">是</option>
-		        <option value="false">否</option>
-		      </select>
-		      <span class="am-form-caret"></span>
-		    </div>
-
-		    <div class="am-form-group">
-		      <label for="doc-ipt-1">报修时段</label>
-		      <div class="am-form-group">
-		      <label class="am-u-sm-1">开始</label>
-		      	<div class="am-u-sm-5"><input type="time" name="startTime"></div>
-		      <label class="am-u-sm-1">结束</label>
-		      	<div class="am-u-sm-5"><input type="time" name="endTime"></div>
-		      </div>
 		    </div>
 
 		    <button type="submit" class="am-btn am-btn-block">确 定</button>
@@ -68,10 +48,6 @@
 		  </div> 
 		  <div class="am-panel-footer">点击展开</div>  		
     	</div>
-=======
-		  </div>   		
-    	</div>-->
->>>>>>> origin/master
 
     	<div class="am-panel am-panel-default">
     	<div class="am-panel-hd am-cf" data-am-collapse="{target: '#tips'}">提示语设计<span class="am-icon-chevron-down am-fr" ></span></div>
@@ -79,29 +55,29 @@
     		<form action="{:U('Main/setTips')}" method="post" class="am-form am-form-horizontal">
 		    <div class="am-form-group">
 		      <label for="doc-ta-1">用户登录页面提示</label>
-		      <textarea class="" rows="5" id="doc-ta-1"></textarea>
+		      <textarea class="" rows="5" id="doc-ta-1" name="tips[login]" maxlength="255" placeholder="255字以内，不显示请留空">{$tips.login}</textarea>
 		    </div>
 		    <div class="am-form-group">
 		      <label for="doc-ta-2">用户注册页面提示</label>
-		      <textarea class="" rows="5" id="doc-ta-2"></textarea>
+		      <textarea class="" rows="5" id="doc-ta-2" name="tips[register]" maxlength="255" placeholder="255字以内，不显示请留空">{$tips.register}</textarea>
 		    </div>
 		    <div class="am-form-group">
 		      <label for="doc-ta-3">普通报修页面提示</label>
-		      <textarea class="" rows="5" id="doc-ta-3"></textarea>
+		      <textarea class="" rows="5" id="doc-ta-3" name="tips[report]" maxlength="255" placeholder="255字以内，不显示请留空">{$tips.report}</textarea>
 		    </div>		    
 		    <div class="am-form-group">
 		      <label for="doc-ta-4">紧急报修页面提示</label>
-		      <textarea class="" rows="5" id="doc-ta-4"></textarea>
+		      <textarea class="" rows="5" id="doc-ta-4" name="tips[emerg]" maxlength="255" placeholder="255字以内，不显示请留空">{$tips.emerg}</textarea>
 		    </div>
 		    <div class="am-form-group">
 		      <label for="doc-ta-5">工单详情页面提示</label>
-		      <textarea class="" rows="5" id="doc-ta-5"></textarea>
+		      <textarea class="" rows="5" id="doc-ta-5" name="tips[detail]" maxlength="255" placeholder="255字以内，不显示请留空">{$tips.detail}</textarea>
 		    </div>
 		    <button type="submit" class="am-btn am-btn-block">确 定</button>	    		    
     		</form>
 		</div>
     	<div class="am-panel-footer">点击展开</div>
-    	</div>-->
+    	</div>
 
 		<div class="am-panel am-panel-default">
 		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#designer'}">区域/楼栋设计器<span class="am-icon-chevron-down am-fr" ></span></div>
@@ -167,51 +143,62 @@
 <script src="__PUBLIC__/resource/js/jquery-ui.min.js"></script>
 <script>
 $(function() {
-	$('.controls').sortable({handle: '.am-icon-arrows'});
+    $('.controls').sortable({handle: '.am-icon-arrows'});
 });
 
-		$(document).delegate('.add-button',"click",function(){
-			var c = '.controls',cn = '.children';
-			var t = $(this).parents(c).html();
-			var l = $(this).parents(c).parent(c).find(c).length;
-			var a = $(this).parents(c).find(cn).first().html();
-			console.log(a);
-			var s = parseInt($(this).parents(c).parent(c).find(c).last().html().match(/\[button\]\[(\d+)\]/i)[1]);
-			
-			
-			s = (s<1)?0:s;
-			t = t.replace(/(<a[\s\S]+?)(add-button)([\s\S]+?)(添加一级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-button$3删除一级菜单$5$6 icon-remove$7");
-			t = t.replace(/(<div[\s\S]+?class="children")([\s\S]+?)(<\/div>)/g, '');
-			t = t+'<div class="children">'+a+'</div>';
-			t = t.replace(/(\[button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
-			t = t.replace(/(\[sub_button\]\[)(\d+)(\])/g, "$1"+(0).toString()+"$3");
-			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
-			//if(l < 3){
-				$($(this).parents(c).parent(c)).append('<div class="controls">'+t+'</div>');
-			//}
-			return false;
-		})
-		$(document).delegate('.add-sub-cate',"click",function(){
-			var c = '.controls',cn = '.children';
-			var t = $(this).parent(cn).html();
-			var l = $(this).parent(cn).parent(c).find(cn).length;
-			var s = parseInt($(this).parent(cn).parent(c).find(cn).last().html().match(/sub_button\]\[(\d+)\]/i)[1]);
-			s = (s<1)?0:s;
-			t = t.replace(/(<a[\s\S]+?)(add-sub-cate)([\s\S]+?)(添加二级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-sub-cate$3删除二级菜单$5$6 icon-remove$7");
-			t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
-			t = t.replace(/(sub_button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
-			//if(l < 5){
-			$($(this).parent(cn).parent(c)).append('<div class="children">'+t+'</div>');
-			//}
+    $(document).delegate('.add-button',"click",function(){
+            var c = '.controls',cn = '.children';
+            var t = $(this).parents(c).html();
+            var l = $(this).parents(c).parent(c).find(c).length;
+            var a = $(this).parents(c).find(cn).first().html();
+            console.log(a);
+            var s = parseInt($(this).parents(c).parent(c).find(c).last().html().match(/\[button\]\[(\d+)\]/i)[1]);
 
-			return false;
-		})
-		$(document).delegate(".remove-sub-cate","click",function(){
-		  	$(this).parent('.children').remove();
-		});
-		$(document).delegate(".remove-button","click",function(){
-		  	$(this).parent('.check-tips').parent('.controls').remove();
-		});
 
+            s = (s<1)?0:s;
+            t = t.replace(/(<a[\s\S]+?)(add-button)([\s\S]+?)(添加一级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-button$3删除一级菜单$5$6 icon-remove$7");
+            t = t.replace(/(<div[\s\S]+?class="children")([\s\S]+?)(<\/div>)/g, '');
+            t = t+'<div class="children">'+a+'</div>';
+            t = t.replace(/(\[button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+            t = t.replace(/(\[sub_button\]\[)(\d+)(\])/g, "$1"+(0).toString()+"$3");
+            t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+            //if(l < 3){
+                    $($(this).parents(c).parent(c)).append('<div class="controls">'+t+'</div>');
+            //}
+            return false;
+    })
+    $(document).delegate('.add-sub-cate',"click",function(){
+            var c = '.controls',cn = '.children';
+            var t = $(this).parent(cn).html();
+            var l = $(this).parent(cn).parent(c).find(cn).length;
+            var s = parseInt($(this).parent(cn).parent(c).find(cn).last().html().match(/sub_button\]\[(\d+)\]/i)[1]);
+            s = (s<1)?0:s;
+            t = t.replace(/(<a[\s\S]+?)(add-sub-cate)([\s\S]+?)(添加二级菜单)([\s\S]+?)(icon-add)([\s\S]+?<\/a>)/i, "$1remove-sub-cate$3删除二级菜单$5$6 icon-remove$7");
+            t = t.replace(/(<input)(.*?)(value=")(.*?)("([^>]*?)>)/g, "$1$2$3$5");
+            t = t.replace(/(sub_button\]\[)(\d+)(\])/g, "$1"+parseInt(parseInt(s) + 1).toString()+"$3");
+            //if(l < 5){
+            $($(this).parent(cn).parent(c)).append('<div class="children">'+t+'</div>');
+            //}
+
+            return false;
+    })
+    $(document).delegate(".remove-sub-cate","click",function(){
+            $(this).parent('.children').remove();
+    });
+    $(document).delegate(".remove-button","click",function(){
+            $(this).parent('.check-tips').parent('.controls').remove();
+    });
+
+  var timer = setInterval(function(){
+    $('#doc-select-1').find('option[value="{$global.isopen}"]').attr('selected', 'selected');
+    if (!$.AMUI.support.mutationobserver) {
+      $('#doc-select-1').trigger('changed.selected.amui');
+    }
+    $('#doc-select-2').find('option[value="{$global.allowregister}"]').attr('selected', 'selected');
+    if (!$.AMUI.support.mutationobserver) {
+      $('#doc-select-2').trigger('changed.selected.amui');
+    }    
+    clearInterval(timer);
+  },100);
 </script>
 <include file="Public/footer" />

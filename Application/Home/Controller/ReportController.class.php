@@ -39,6 +39,9 @@ class ReportController extends SimpleController {
     			$this->error('报修提交失败');
     		}
     	}else{
+            $tips = M('setting')->where("`key`='tips'")->find();
+            $tips = json_decode($tips['value'],true); 
+            $this->assign('tips',$tips['report']);             
             $data = menu();
             $this->assign('data',json_encode($data));
     		$this->display('report');
@@ -75,6 +78,9 @@ class ReportController extends SimpleController {
     			$this->error('报修提交失败');
     		}
     	}else{
+            $tips = M('setting')->where("`key`='tips'")->find();
+            $tips = json_decode($tips['value'],true); 
+            $this->assign('tips',$tips['emerg']);             
             $data = menu();
             $this->assign('data',json_encode($data));            
     		$this->display('emerg');
@@ -87,6 +93,9 @@ class ReportController extends SimpleController {
     	if(empty($detail)){
     		$this->error('该工单不存在');
     	}else{
+            $tips = M('setting')->where("`key`='tips'")->find();
+            $tips = json_decode($tips['value'],true); 
+            $this->assign('tips',$tips['detail']);             
             $user = M('user')->where('uid = :uid')->bind(':uid',$detail['user'])->find(); 
             $this->assign('user',$user); 
     		$this->assign('detail',$detail);

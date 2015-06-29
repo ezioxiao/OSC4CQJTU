@@ -6,7 +6,7 @@
       <label for="username">用户名:</label>
       <input type="text" name="uid" id="username" placeholder="请输入用户名" required>
       <br>
-      <label for="password">密码:</label>
+      <label for="password">密码:</label><a href="{:U('User/findpsw')}" class="am-fr">忘记密码?</a>
       <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="请输入密码" required>
       <br>
       <label for="verify">验证码:</label>
@@ -15,7 +15,7 @@
       <br>    
       <div class="am-btn-group am-btn-group-justify am-cf">
         <input type="submit" value="登 录" class="am-btn am-btn-primary am-radius am-fl">
-        <input type="button" onclick="window.location.href='{:U('User/register')}'" value="注 册" class="am-btn am-btn-default am-radius am-fr">
+        <input type="button" onclick="window.location.href='{:U('User/register')}'" value="注 册" class="am-btn am-btn-default am-radius am-fr <if condition="$allowregister eq 'false'">am-disabled</if>">
       </div>
     </form>
 </div>

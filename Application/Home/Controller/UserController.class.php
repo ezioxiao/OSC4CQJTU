@@ -9,6 +9,12 @@ class UserController extends SimpleController {
     //用户登录
     public function login(){
     	if(session('?uid'))$this->redirect('order');
+
+    	//是否允许注册
+        $global = M('setting')->where("`key`='global'")->find();
+        $global = json_decode($global['value'],true); 
+        $this->assign('allowregister',$global['allowregister']);  
+
     	if(IS_POST){
             $database = M('user');  
             if(!D("User")->create()){
@@ -30,9 +36,12 @@ class UserController extends SimpleController {
     			$database->where('uid=:uid')->bind(':uid',$user['uid'])->save($data);
     			session('uid',$user['uid']);
     			if(!empty($user['username']))session('username',$user['username']);
-    			$this->success('登录成功',U('Main/index'));
+    			$this->redirect('Main/index');
     		}
     	}else{
+	        $tips = M('setting')->where("`key`='tips'")->find();
+	        $tips = json_decode($tips['value'],true); 
+	        $this->assign('tips',$tips['login']);     		
     		$this->display('login');
     	}
     }
@@ -40,6 +49,10 @@ class UserController extends SimpleController {
     //用户注册
     public function register(){
     	if(session('?uid'))$this->redirect('order');
+    	//是否允许注册
+        $global = M('setting')->where("`key`='global'")->find();
+        $global = json_decode($global['value'],true); 
+        if($global['allowregister']=='false')$this->error('站点已关闭注册');  	
     	if(IS_POST){
     		$database = M('user');            
             if(!D("User")->create()){
@@ -50,6 +63,7 @@ class UserController extends SimpleController {
             }
             $data['uid'] = I('post.uid');
             $salt = salt();
+            $data['salt'] = $salt;
             $data['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$salt);
             $add = $database->data($data)->filter('strip_tags')->add();
             if($add){
@@ -58,13 +72,16 @@ class UserController extends SimpleController {
             	$this->error('注册失败');
             }
     	}else{
+	        $tips = M('setting')->where("`key`='tips'")->find();
+	        $tips = json_decode($tips['value'],true); 
+	        $this->assign('tips',$tips['register']);    		
     		$this->display('register');
     	}
     }
 
     //找回密码
     public function findpsw(){
-
+    	$this->error();
     }
 
     //用户注销

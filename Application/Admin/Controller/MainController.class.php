@@ -117,14 +117,68 @@ class MainController extends SimpleController {
             $data['value'] = json_encode($building);
             $database->add($data,array(),true);            
         }
+        $global = $database->where("`key`='global'")->find();
+        $global = json_decode($global['value'],true);
+        $this->assign('global',$global);
+
+        $tips = $database->where("`key`='tips'")->find();
+        $tips = json_decode($tips['value'],true);
+        $this->assign('tips',$tips);
+
         $area = $database->where("`key`='area'")->find();
-        $building = $database->where("`key`='building'")->find();
         $area = json_decode($area['value'],true);
-        $building = json_decode($building['value'],true);
         $this->assign('area',$area);
+
+        $building = $database->where("`key`='building'")->find();
+        $building = json_decode($building['value'],true);
         $this->assign('building',$building);
+
         $this->display('admin-setting');
+    }
+
+    public function setGlobal(){
+    	if(!session('?admin'))$this->redirect('Main/index');
+        if(IS_POST){
+        	$database = M('setting');
+	        if (!$database->autoCheckToken($_POST)){
+	            $this->error('令牌验证错误',U('Main/setting'));
+	        } 
+	    	$global = I('post.global');
+	    	if(!in_array($global['isopen'],array(true,false)))$this->error('参数非法');
+	    	if(!in_array($global['allowregister'],array(true,false)))$this->error('参数非法');   	
+			$data['key'] = 'global';
+	    	$data['value'] = json_encode($global);
+	    	$add = $database->add($data,array(),true);
+	    	if($add){
+	    		$this->success('设置保存成功');
+	    	}else{
+	    		$this->error('设置保存失败');
+	    	}
+        }else{
+        	$this->redirect('Main/setting');
+        }
     }    
+
+    public function setTips(){
+    	if(!session('?admin'))$this->redirect('Main/index');
+    	if(IS_POST){
+    		$database = M('setting');
+	        if (!$database->autoCheckToken($_POST)){
+	            $this->error('令牌验证错误',U('Main/setting'));
+	        }     		
+    		$tips = I('post.tips');
+    		$data['key'] = 'tips';
+    		$data['value'] = json_encode($tips);
+    		$add = $database->data($data)->filter('strip_tags')->add($data,array(),true);
+	    	if($add){
+	    		$this->success('设置保存成功');
+	    	}else{
+	    		$this->error('设置保存失败');
+	    	}    		
+    	}else{
+    		$this->redirect('Main/setting');
+    	}
+    }
 
     //注销
     public function logout(){
