@@ -30,7 +30,12 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-
+<noempty name="tips">
+<div class="am-alert am-alert-default" data-am-alert>
+  <button type="button" class="am-close">&times;</button>
+  <p>{$tips}</p>
+</div>
+</noempty>
 <div class="am-panel am-panel-default">
   <div class="am-panel-hd">工单进度</div>
   <div class="am-panel-bd">
