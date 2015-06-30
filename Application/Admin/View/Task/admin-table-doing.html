@@ -115,14 +115,14 @@
       'dataType':'text',
       success:function(res){
           if(res==1){
-            alert('标记[未处理]成功');
+            modal_alert('标记[未处理]成功');
             window.location.reload();
           }else{
-            alert('标记失败');
+            modal_alert('标记失败');
           }
       },
       error:function(res){
-          alert('连接失败');
+          modal_alert('连接失败');
       }
     });
   });
@@ -135,37 +135,29 @@
       'dataType':'text',
       success:function(res){
           if(res==1){
-            alert('标记[已处理]成功');
+            modal_alert('标记[已处理]成功');
             window.location.reload();
           }else{
-            alert('标记失败');
+            modal_alert('标记失败');
           }
       },
       error:function(res){
-          alert('连接失败');
+          modal_alert('连接失败');
       }
     });
   });
 
   $('#markDel').click(function(){
-    $.ajax({
-      'type':'post',
-      'url':"{:U('Task/del')}",
-      'data':$('form').serialize(),
-      'dataType':'text',
-      success:function(res){
-          if(res>0){
-            alert('删除成功');
-            window.location.reload();
-          }else{
-            alert('标记失败');
-          }
-      },
-      error:function(res){
-          alert('连接失败');
-      }
-    });
-  });    
+    var string = '';
+    var config = {
+      action:'del',
+      success:'删除成功',
+      fail:'删除失败',
+      error:'连接失败'
+    };
+    modal_confirm(string,config);
+  });
+     
   })
 </script>
 <include file="Public/footer" />

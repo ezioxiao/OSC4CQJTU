@@ -74,7 +74,7 @@ class ArticleController extends SimpleController {
     		}else{
     			$res = $database->delete(I('post.id'));
     		}
-    		echo json_encode($res);
+    		echo $res;
     	}    	
     }
 }

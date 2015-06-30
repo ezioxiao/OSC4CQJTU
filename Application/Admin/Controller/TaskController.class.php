@@ -28,7 +28,7 @@ class TaskController extends SimpleController {
 	    		$database->dotime = '';    			
     			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
     		}
-    		echo json_encode($res);
+    		echo $res;
     	}else{
             $map['status'] = 0;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
@@ -60,7 +60,7 @@ class TaskController extends SimpleController {
     			$database->donetime = '';    			
     			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
     		}
-    		echo json_encode($res);
+    		echo $res;
     	}else{    	
             $map['status'] = 1;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
@@ -90,7 +90,7 @@ class TaskController extends SimpleController {
 	    		$database->donetime = time();     			
     			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
     		}
-    		echo json_encode($res);
+    		echo $res;
     	}else{
             $map['status'] = 2;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
@@ -114,7 +114,7 @@ class TaskController extends SimpleController {
     		}else{
     			$res = $database->delete(I('post.order'));
     		}
-    		echo json_encode($res);
+    		echo $res;
     	}
     } 
 }

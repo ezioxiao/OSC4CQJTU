@@ -18,9 +18,8 @@
       <div class="am-u-sm-12 am-u-md-6">
         <div class="am-btn-toolbar">
           <div class="am-btn-group am-btn-group-xs">
-            <button type="button" class="am-btn am-btn-default"><span class="am-icon-plus"></span> 新增</button>
-            <button type="button" class="am-btn am-btn-default"><span class="am-icon-file-excel-o"></span> 导出</button>
-            <button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+            <button type="button" class="am-btn am-btn-default" onclick="window.location.href='{:U('User/add')}'"><span class="am-icon-plus"></span> 新增</button>
+            <button type="button" id="markDel" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
           </div>
         </div>
       </div>
@@ -29,12 +28,14 @@
         </div>
       </div>
       <div class="am-u-sm-12 am-u-md-3">
+       <form>
         <div class="am-input-group am-input-group-sm">
-          <input type="text" class="am-form-field">
+          <input name="uid" type="text" class="am-form-field">
           <span class="am-input-group-btn">
-            <button class="am-btn am-btn-default" type="button">搜索</button>
+            <button class="am-btn am-btn-default" type="submit">搜索</button>
           </span>
         </div>
+       </form>
       </div>
     </div>
 
@@ -50,7 +51,7 @@
           <tbody>
             <foreach name="list" item="vo" >
             <tr>
-              <td><input type="checkbox" class="ids" name="uid[]"/></td>
+              <td><input type="checkbox" class="ids" name="uid[]" value="{$vo.uid}"/></td>
               <td>{$vo.uid}</td>
               <td>{:area($vo['area'])}</td>
               <td>{:building($vo['area'],$vo['building'])}</td>
@@ -59,9 +60,7 @@
               <td>
                 <div class="am-btn-toolbar">
                   <div class="am-btn-group am-btn-group-xs">
-                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                    <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
-                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                    <button onclick="window.location.href='{:U('User/edit',array('uid'=>$vo['uid']))}'" class="am-btn am-btn-default am-btn-xs am-text-secondary" type="button"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                   </div>
                 </div>
               </td>
@@ -101,6 +100,18 @@ $(function(){
       }
     });
   });
+
+  $('#markDel').click(function(){
+    var string = '';
+    var config = {
+      action:'del',
+      success:'删除成功',
+      fail:'删除失败',
+      error:'连接失败'
+    };
+    modal_confirm(string,config);
+  });
+
 });
 </script>
 <include file="Public/footer" />
