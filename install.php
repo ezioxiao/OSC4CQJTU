@@ -121,9 +121,17 @@ include './Application/Common/Common/function.php';
 			$settingstr = "<?php \n return array(\n";
 			foreach($c as $key=>$v){
 				if($i == count($c)-1){
-					$settingstr .= "\t'".$key."'=>'".$v."'";
+					if(is_array($v)){
+						$settingstr .= "\t'".$key."'=>array('".implode("','",$v)."')";
+					}else{
+						$settingstr .= "\t'".$key."'=>'".$v."'";
+					}
 				}else{
-					$settingstr .= "\t'".$key."'=>'".$v."',\n";
+					if(is_array($v)){
+						$settingstr .= "\t'".$key."'=>array('".implode("','",$v)."'),\n";
+					}else{
+						$settingstr .= "\t'".$key."'=>'".$v."',\n";
+					}					
 				}	
 				$i++;
 			}

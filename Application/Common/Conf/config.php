@@ -1,5 +1,7 @@
 <?php 
  return array(
+	'MODULE_DENY_LIST'=>array('Common','Runtime'),
+	'MODULE_ALLOW_LIST'=>array('Home','Admin'), 	
 	'MULTI_MODULE'=>'1',
 	'DEFAULT_MODULE'=>'Home',
 	'DEFAULT_CONTROLLER'=>'Main',
@@ -17,7 +19,7 @@
 	'DB_PORT'=>'3306',
 	'DB_PREFIX'=>'',
 	'DB_CHARSET'=>'utf8',
-	'URL_MODEL'=>'1',
+	'URL_MODEL'=>'2',
 	'URL_HTML_SUFFIX'=>'html',
 	'URL_DENY_SUFFIX'=>'ico|png|gif|jpg',
 	'URL_PARAMS_BIND'=>'1',
