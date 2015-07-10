@@ -2,26 +2,37 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-<noempty name="tips">
+<notempty name="tips">
 <div class="am-alert am-alert-default" data-am-alert>
   <button type="button" class="am-close">&times;</button>
   <p>{$tips}</p>
 </div>
-</noempty>
+</notempty>
     <form method="post" class="am-form">
-      <label for="username">用户名:</label>
-      <input type="text" name="uid" id="username" placeholder="请输入用户名" required>
+      <if condition="$quickreport eq 'true'">
+      <label for="username">姓名:</label>
+      <input type="text" name="username" id="username" placeholder="请输入真实姓名" required>
       <br>
-      <label for="password">密码:</label><a href="{:U('User/findpsw')}" class="am-fr">忘记密码?</a>
+      <label for="uid">学号:</label><a href="#" class="am-fr">信息不匹配?</a>
+      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号）" required>
+      <br>      
+      <else/>
+      <label for="uid">学号:</label>
+      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号）" required>
+      <br>
+      <label for="password">密码:</label><a href="#" class="am-fr">忘记密码?</a>
       <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="请输入密码" required>
       <br>
+      </if>
       <label for="verify">验证码:</label>
       <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">
       <input type="text" name="verify" id="verify" maxlength="5" placeholder="请输入验证码" required>
       <br>    
       <div class="am-btn-group am-btn-group-justify am-cf">
         <input type="submit" value="登 录" class="am-btn am-btn-primary am-radius am-fl">
+        <if condition="$allowregister eq 'true'">
         <input type="button" onclick="window.location.href='{:U('User/register')}'" value="注 册" class="am-btn am-btn-default am-radius am-fr <if condition="$allowregister eq 'false'">am-disabled</if>">
+        </if>
       </div>
     </form>
 </div>

@@ -22,7 +22,12 @@ class ListController extends SimpleController {
         $emerg = I('get.emerg');
         if(isset($status)&&$status!='')$map['status'] = I('get.status');
         if(isset($emerg)&&$emerg!='')$map['emerg'] = I('get.emerg');  
-        $map['order'] = array('like','%'.I('param.order').'%');      
+        $where['order'] = array('like','%'.I('param.order').'%');
+        $where['user'] = I('param.order');
+        $where['doctor'] = I('param.order');
+        $where['repairer'] = I('param.order');    
+        $where['_logic'] = 'or';
+        $map['_complex'] = $where;         
     	$list = $database->where($map)->order('time desc')->page(I('get.p').',25')->select();
     	$this->assign('list',$list);
     	$count = $database->where($map)->count();

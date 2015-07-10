@@ -30,22 +30,28 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-<noempty name="tips">
+<notempty name="tips">
 <div class="am-alert am-alert-default" data-am-alert>
   <button type="button" class="am-close">&times;</button>
   <p>{$tips}</p>
 </div>
-</noempty>
+</notempty>
 <div class="am-panel am-panel-default">
   <div class="am-panel-hd">工单进度</div>
   <div class="am-panel-bd">
+  <if condition="!empty($detail['canceltime'])" >
+    <li>{:date('Y年m月d日 H:i:s',$detail['canceltime'])} 用户取消报修</li>
+  </if>   
   <if condition="!empty($detail['donetime'])" >
-  	<li>{:date('Y年m月d日 H:i:s',$detail['donetime'])} 处理完毕</li>
+  	<li>{:date('Y年m月d日 H:i:s',$detail['donetime'])} 工单处理完毕</li>
   </if>  
   <if condition="!empty($detail['dotime'])" >
-  	<li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 确认工单，正在处理</li>
+  	<li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 正在处理</li>
+    <li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 分派维修人员 <span class="am-text-primary">{$detail.repairer}</span></li>
+    <li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} <span class="am-text-primary">{$detail.doctor}</span> 已确认工单</li>
   </if>  
-    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 提交工单</li>
+    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 系统生成工单号 <span class="am-text-primary">{$detail.order}</span></li>
+    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 用户提交报修</li>
   </div>
 </div>
 

@@ -8,12 +8,13 @@ class MainController extends SimpleController {
         $this->assign('notice',$notice);
     	//统计
     	$stat['today'] = M('order')->where('time>:time')->bind(':time',strtotime(date("Y-m-d")))->count();
-	$stat['todo'] = M('order')->where('status=0')->count();
+		$stat['todo'] = M('order')->where('status=0')->count();
     	$stat['doing'] = M('order')->where('status=1')->count();
     	$stat['done'] = M('order')->where('status=2')->count();
         $this->assign('stat',$stat);
     	//最新报修
-    	$list = M('order')->order('time desc')->limit(25)->select();
+        //$map['status'] = array('neq',-1);//是否显示已取消工单
+    	$list = M('order')->where($map)->order('time desc')->limit(25)->select();
         $this->assign('list',$list);
         $this->display('main');
     }

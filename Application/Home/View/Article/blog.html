@@ -63,6 +63,7 @@
 
 <div class="am-g am-g-fixed blog-g-fixed">
   <div class="am-u-md-8">
+  <notempty name="list">
   {$page}
    <foreach name="list" item="value" key="key">
     <article class="blog-main" id="{$value['acid']}">
@@ -81,6 +82,11 @@
     <hr class="am-article-divider blog-hr">
    </foreach>
   {$page}
+  <else/>
+    <article class="blog-main">
+      <h3 class="am-article-title blog-title">这里没有任何东西...</h3>
+    </article>
+  </notempty>
   </div>
 
   <div class="am-u-md-4 blog-sidebar">
@@ -88,8 +94,8 @@
       <section class="am-panel am-panel-default">
         <div class="am-panel-hd">关于我</div>
         <div class="am-panel-bd">
-          <p>重庆交通大学后勤服务总公司是重庆交通大学直属单位，成立于2000年，下设有物管公司、能源中心、饮食管理公司、交大驾校、双福校区分公司等部门，现有员工1800人。</p>
-          <a class="am-btn am-btn-success am-btn-sm" href="//www2.cqjtu.edu.cn/hq">查看更多 →</a>
+          <p><notempty name="copyright.aboutus">{$copyright.aboutus}<else/>重庆交通大学后勤服务总公司是重庆交通大学直属单位，成立于2000年，下设有物管公司、能源中心、饮食管理公司、交大驾校、双福校区分公司等部门，现有员工1800人。</notempty></p>
+          <a class="am-btn am-btn-success am-btn-sm" target="_blank" href="<notempty name="copyright.link">{$copyright.link}<else/>http://www2.cqjtu.edu.cn/hq/</notempty>">查看更多 →</a>
         </div>
       </section>
       <section class="am-panel am-panel-default">

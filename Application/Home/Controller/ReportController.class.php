@@ -13,13 +13,16 @@ class ReportController extends SimpleController {
  			$user = $database->where('uid = :uid')->bind(':uid',session('uid'))->find(); 
  			$this->assign('user',$user);
     	}else{
-    		$this->redirect('User/login');
+    		$this->redirect('User/login',array('returnURL'=>base64_encode(__SELF__)));
     	}
     	if(IS_POST){
     		$database = M('order');
             if (!$database->autoCheckToken($_POST)){
                 $this->error('令牌验证错误');
-            }              
+            }        
+            if(!empty(I('post.tel'))){
+            	M('user')->where('uid=:uid')->bind(':uid',session('uid'))->save(array('tel'=>I('post.tel')));
+            }      
     		$data['area'] = I('post.area/d');//校区
     		if(!selectCheck($data['area']))$this->error('参数非法');
 			$data['building'] = I('post.building/d');//楼栋
@@ -28,7 +31,7 @@ class ReportController extends SimpleController {
     		$data['good'] = I('post.good');//物品
     		$data['description'] = I('post.description');//描述
     		$data['user'] = session('uid');//用户
-    		$data['order'] = creatOrderSn();//工单号
+    		$data['order'] = creatOrderSn($data['area']);//工单号
     		$data['time'] = time();//时间
     		$data['status'] = 0;//状态 未处理0 处理中1 已处理2
     		$data['emerg'] = 0;//是否紧急 普通0 紧急1
@@ -55,19 +58,22 @@ class ReportController extends SimpleController {
  			$user = $database->where('uid = :uid')->bind(':uid',session('uid'))->find(); 
  			$this->assign('user',$user); 
     	}else{
-    		$this->redirect('User/login');
+    		$this->redirect('User/login',array('returnURL'=>base64_encode(__SELF__)));
     	}	
     	if(IS_POST){
     		$database = M('order');
             if (!$database->autoCheckToken($_POST)){
                 $this->error('令牌验证错误');
-            }             
+            } 
+            if(!empty(I('post.tel'))){
+            	M('user')->where('uid=:uid')->bind(':uid',session('uid'))->save(array('tel'=>I('post.tel')));
+            }                        
     		$data['area'] = I('post.area/d');//校区
     		if(!selectCheck($data['area']))$this->error('参数非法');
     		$data['location'] = I('post.location');//地点
     		$data['description'] = I('post.description');//描述
     		$data['user'] = session('uid');//用户
-    		$data['order'] = creatOrderSn();//工单号
+    		$data['order'] = creatOrderSn($data['area']);//工单号
     		$data['time'] = time();//时间
     		$data['status'] = 0;//状态 未处理0 处理中1 已处理2
     		$data['emerg'] = 1;//是否紧急 普通0 紧急1

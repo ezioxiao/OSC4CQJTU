@@ -21,13 +21,22 @@
         <form method="post" id="doc-vld-msg" class="am-form">
         <fieldset>
           <div class="am-form-group">
-            <label for="uid" class="am-form-label">用户名</label>
+            <label for="uid" class="am-form-label">学号</label>
             <div class="">
               <input type="text" maxlength="20" name="uid" id="uid" placeholder="输入你的用户名" required>
               <small></small>
             </div>
           </div>
 
+          <if condition="$quickreport eq 'true'">
+          <div class="am-form-group">
+            <label for="username" class="am-form-label">姓名</label>
+            <div class="">
+              <input type="text" maxlength="20" name="username" id="username" placeholder="输入你的用户名" required>
+              <small></small>
+            </div>
+          </div>          
+          <else/>
           <div class="am-form-group">
             <label for="password" class="am-form-label">密码</label>
             <div class="">
@@ -42,6 +51,30 @@
               <input type="password" id="rpassword" minlength="6" maxlength="20" placeholder="再次输入你的密码" data-equal-to="#password" required>
             </div>
           </div>
+          </if>
+		    <div class="am-form-group">
+		      <label class="am-form-label">报修区域：</label>
+		      <select id="province" name="area" required>
+		        <option value="载入中">载入中</option>
+		      </select>                     
+		    </div>
+
+		    <div class="am-form-group">
+		      <label class="am-form-label">报修楼栋：</label>
+		      <select id="city" name="building" required>
+		        <option value="载入中">载入中</option>
+		      </select>        
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="location" class="am-form-label">常驻寝室：</label>
+		      <input type="text" id="location" name="location" placeholder="请输入寝室号"/>
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="tel" class="am-form-label">联系电话：</label>
+		      <input type="text" name="tel" id="tel" placeholder="请输入联系电话" />
+		    </div>
 
           <div class="am-form-group">
             <div class="">
@@ -56,8 +89,15 @@
   <!-- content end -->
 
 </div>
+<script type="text/javascript" src="__PUBLIC__/assets/js/jquery.city.select.js"></script>
 <script>
 $(function() {
+
+    var data = {$data};
+
+    $('#province, #city').citylist({data:data, id:'id', children:'citys',name:'name',metaTag:'name'});
+    window.prettyPrint && prettyPrint();
+	
   $('#doc-vld-msg').validator({
     onValid: function(validity) {
       $(validity.field).closest('.am-form-group').find('.am-alert').hide();

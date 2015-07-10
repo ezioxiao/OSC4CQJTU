@@ -33,6 +33,13 @@
       <input type="text" name="tel" id="report-3" value="{$user['tel']}" placeholder="请输入联系电话" required/>
     </div>
 
+    <if condition="$quickreport eq 'false'">
+      <div class="am-form-group">
+        <label for="report-4">修改密码：</label>
+        <input type="password" name="password" id="report-4" placeholder="6-20位，不修改请留空" required/>
+      </div>      
+    </if>
+
     <button class="am-btn am-btn-success am-btn-block am-radius" type="submit">提 交</button>
   </fieldset>
 </form>

@@ -1,0 +1,53 @@
+<include file="Public/header" />
+
+<include file="Public/topbar" />
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+<include file="Public/sidebar" />
+  <!-- sidebar end -->
+  
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="am-cf am-padding">
+      <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">用户批量导入</strong> / <small>Accounts additon</small></div>
+    </div>
+
+    <hr/>
+
+    <div class="am-g">
+      <div class="am-u-sm-12">
+       <form method="post" action="{:U('User/upload')}" enctype="multipart/form-data">
+        <div class="am-form-group am-form-file">
+          <button type="button" class="am-btn am-btn-danger am-btn-sm">
+            <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+          <input id="doc-form-file" type="file" name="excelData" multiple>
+        </div>
+        <div id="file-list"></div>
+        <button type="submit" class="am-btn am-btn-primary">导入</button>
+        <hr />
+        <p>后勤在线服务中心 Online Service Center</p>
+        <script>
+          $(function() {
+            $('#doc-form-file').on('change', function() {
+              var fileNames = '';
+              $.each(this.files, function() {
+                fileNames += '<span class="am-badge">' + this.name + '</span> ';
+              });
+              $('#file-list').html(fileNames);
+            });
+          });
+        </script>        
+      </div>
+     </form>
+    </div>
+  </div>
+  <!-- content end -->
+
+</div>
+<script>
+$(function() {
+
+});
+</script>
+<include file="Public/footer" />

@@ -21,24 +21,40 @@
             <button id="markTodo" type="button" class="am-btn am-btn-default"><span class="am-icon-save"></span> 标记为未处理</button>
             <button id="markDoing" type="button" class="am-btn am-btn-default"><span class="am-icon-archive"></span> 标记为处理中</button>
             <button id="markDel" type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+            <a class="am-btn am-btn-default" href="__SELF__?action=export" target="_blank"><span class="am-icon-file-excel-o"></span> 导出</a>
           </div>
         </div>
       </div>
+      <form>
       <div class="am-u-sm-12 am-u-md-3">
         <div class="am-form-group">
+          <notempty name="area">
+      <select name="area[]" multiple data-am-selected="{btnWidth: '100%', btnSize: 'sm', btnStyle: 'secondary'}">
+        <foreach name="area" item="vo" key="k" >
+          <option value="{$vo}" <if condition="in_array($vo,I('get.area'))">selected</if>>{:area($vo)}</option>
+        </foreach>        
+      </select> 
+      </notempty>
 
-        </div>
+      <notempty name="building">
+      <select name="building[]" multiple data-am-selected="{btnWidth: '100%', btnSize: 'sm', btnStyle: 'secondary'}">
+        <foreach name="building" item="vo" key="k" >
+          <option value="{$vo}" <if condition="in_array($vo,I('get.building'))">selected</if>>{:buildings($vo)}</option>
+        </foreach>        
+      </select>
+      </notempty>     
+        </div>        
       </div>
+
       <div class="am-u-sm-12 am-u-md-3">
-      <form>
         <div class="am-input-group am-input-group-sm">
           <input type="text" name="order" placeholder="输入工单号" class="am-form-field">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default" type="submit">搜索</button>
           </span>
         </div>
-      </form>
       </div>
+      </form>
     </div>
 
     <div class="am-g">
@@ -56,6 +72,7 @@
                 <th class="table-author am-hide-sm-only">报修人员</th>
                 <th class="table-author">报修物品</th>
                 <th class="table-id am-hide-sm-only">故障描述</th>
+                <th class="table-author am-hide-sm-only">维修人员</th>
               </tr>
           </thead>
           <tbody>
@@ -70,6 +87,7 @@
               <td class="am-hide-sm-only">{$vo.user}</td>
               <td>{:empty($vo['good'])?'-':$vo['good']}</td>      
               <td class="am-hide-sm-only"><empty name="vo.description">无<else/>有</empty></td>
+              <td class="am-hide-sm-only">{$vo.repairer}</td>
             </tr>
             </foreach>
           </tbody>
@@ -106,7 +124,9 @@
       }
     });
   });  
-
+  $('tr').click(function(){
+    $(this).find('.ids').click();
+  });
   $('#markTodo').click(function(){
     $.ajax({
       'type':'post',
@@ -116,7 +136,6 @@
       success:function(res){
           if(res==1){
             modal_alert('标记[未处理]成功');
-            window.location.reload();
           }else{
             modal_alert('标记失败');
           }
@@ -136,7 +155,6 @@
       success:function(res){
           if(res==1){
             modal_alert('标记[处理中]成功');
-            window.location.reload();
           }else{
             modal_alert('标记失败');
           }

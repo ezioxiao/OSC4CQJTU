@@ -33,15 +33,31 @@
 		return $index;
 	}
 
+    function buildings($index){
+        $building = M('setting')->where('`key`="building"')->find();
+        $building = json_decode($building['value'],true);        
+        foreach($building as $k=>$v){
+            foreach ($v as $key => $value) {
+                if($value['key']==$index){
+                    return $value['name'];
+                }
+            }
+        }
+        return $index;
+    }
+
 	function status($status){
         switch($status){
-            case 0:
+            case '-1':
+            return '已取消';
+            break;            
+            case '0':
             return '未维修';
             break;
-            case 1:
+            case '1':
             return '维修中';
             break;
-            case 2:
+            case '2':
             return '已维修';
             break;
         }

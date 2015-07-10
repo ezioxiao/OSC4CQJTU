@@ -1,7 +1,12 @@
 <if condition="session('?admin')">
 <a class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
 </if>
-
+<div data-am-widget="gotop" class="am-gotop am-gotop-fixed">
+  <a href="#top" title="回到顶部">
+    <span class="am-gotop-title">回到顶部</span>
+    <i class="am-gotop-icon am-icon-chevron-up"></i>
+  </a>
+</div>
 <footer>
   <hr>
   <p class="am-padding-left">© 2015 CQJTU. 由 天佑工作室 提供技术支持.</p>
@@ -15,7 +20,7 @@
       
     </div>
     <div class="am-modal-footer">
-      <span class="am-modal-btn">确定</span>
+      <span class="am-modal-btn" onclick="window.location.reload();">确定</span>
     </div>
   </div>
 </div>
@@ -32,6 +37,21 @@
     </div>
   </div>
 </div>
+
+<div class="am-modal am-modal-prompt" tabindex="-1" id="prompt">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">操作提示</div>
+    <div class="am-modal-bd">
+      请输入出勤的工人姓名
+      <input type="text" class="am-modal-prompt-input">
+    </div>
+    <div class="am-modal-footer">
+      <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+      <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+    </div>
+  </div>
+</div>
+
 </if>
 <!--[if lt IE 9]>
 <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>

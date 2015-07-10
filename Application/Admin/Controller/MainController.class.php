@@ -22,6 +22,7 @@ class MainController extends SimpleController {
     			$this->error('密码错误',U('Main/index'));
     		}else{
 	            session('admin',$admin['username']);
+                session('right',$admin['right']);
                 $data['lastip'] = get_client_ip();
                 $data['lasttime'] = time();
                 $database->where('username=:username and password=:password')->bind($bind)->save($data);
@@ -68,7 +69,21 @@ class MainController extends SimpleController {
             M('order')->where('status=2 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
             M('order')->where('status=2 and time>'.strtotime(date('y-m-d')))->count()));
         $this->assign('stat',$stat);
-        $list = M('order')->where('emerg=1')->order('time desc')->limit(5)->select();
+
+        //仅显示范围内的紧急报修
+        $admin = M('admin')->where('username=:username')->bind(':username',session('admin'))->find();
+        $admin = json_decode($admin['location'],true);
+        if(!empty($admin['area']) && !empty($admin['building'])){
+            $where['area'] = array('in',$admin['area']);
+            $where['building'] = array('in',$admin['building']);
+            $where['_logic'] = 'or';
+            $map['_complex'] = $where;
+        }
+        elseif(!empty($admin['area']))$map['area'] = array('in',$admin['area']);
+        elseif(!empty($admin['building']))$map['building'] = array('in',$admin['building']);
+        $map['emerg'] = 1;
+        $map['status'] = array('neq',-1);
+        $list = M('order')->where($map)->order('time desc')->limit(5)->select();
         $this->assign('list',$list);
     	$this->display('admin-index');
     }
@@ -99,6 +114,7 @@ class MainController extends SimpleController {
     //系统设置
     public function setting(){
         if(!session('?admin'))$this->redirect('Main/index');
+        if(session('right')!=1)$this->error('访问无权限');
         $database = M('setting');
         if(IS_POST){         
     		if (!$database->autoCheckToken($_POST)){
@@ -125,6 +141,10 @@ class MainController extends SimpleController {
         $tips = json_decode($tips['value'],true);
         $this->assign('tips',$tips);
 
+        $copyright = $database->where("`key`='copyright'")->find();
+        $copyright = json_decode($copyright['value'],true);
+        $this->assign('copyright',$copyright);       
+
         $area = $database->where("`key`='area'")->find();
         $area = json_decode($area['value'],true);
         $this->assign('area',$area);
@@ -138,6 +158,7 @@ class MainController extends SimpleController {
 
     public function setGlobal(){
     	if(!session('?admin'))$this->redirect('Main/index');
+    	if(session('right')!=1)$this->error('访问无权限');
         if(IS_POST){
         	$database = M('setting');
 	        if (!$database->autoCheckToken($_POST)){
@@ -145,7 +166,8 @@ class MainController extends SimpleController {
 	        } 
 	    	$global = I('post.global');
 	    	if(!in_array($global['isopen'],array(true,false)))$this->error('参数非法');
-	    	if(!in_array($global['allowregister'],array(true,false)))$this->error('参数非法');   	
+	    	if(!in_array($global['allowregister'],array(true,false)))$this->error('参数非法');   
+            if(!in_array($global['quickreport'],array(true,false)))$this->error('参数非法');	
 			$data['key'] = 'global';
 	    	$data['value'] = json_encode($global);
 	    	$add = $database->add($data,array(),true);
@@ -161,6 +183,7 @@ class MainController extends SimpleController {
 
     public function setTips(){
     	if(!session('?admin'))$this->redirect('Main/index');
+    	if(session('right')!=1)$this->error('访问无权限');
     	if(IS_POST){
     		$database = M('setting');
 	        if (!$database->autoCheckToken($_POST)){
@@ -169,6 +192,28 @@ class MainController extends SimpleController {
     		$tips = I('post.tips');
     		$data['key'] = 'tips';
     		$data['value'] = json_encode($tips);
+    		$add = $database->data($data)->filter('strip_tags')->add($data,array(),true);
+	    	if($add){
+	    		$this->success('设置保存成功');
+	    	}else{
+	    		$this->error('设置保存失败');
+	    	}    		
+    	}else{
+    		$this->redirect('Main/setting');
+    	}
+    }
+
+    public function setCopyright(){
+    	if(!session('?admin'))$this->redirect('Main/index');
+    	if(session('right')!=1)$this->error('访问无权限');
+    	if(IS_POST){
+    		$database = M('setting');
+	        if (!$database->autoCheckToken($_POST)){
+	            $this->error('令牌验证错误',U('Main/setting'));
+	        }     		
+    		$copyright = I('post.copyright');
+    		$data['key'] = 'copyright';
+    		$data['value'] = json_encode($copyright);
     		$add = $database->data($data)->filter('strip_tags')->add($data,array(),true);
 	    	if($add){
 	    		$this->success('设置保存成功');
@@ -190,7 +235,7 @@ class MainController extends SimpleController {
     public function v(){
 		$Verify =     new \Think\Verify();
 		// 验证码字体使用 ThinkPHP/Library/Think/Verify/ttfs/5.ttf
-		$Verify->useZh = true; 
+		//$Verify->useZh = true; 
 		$Verify->entry();    	
     }
 

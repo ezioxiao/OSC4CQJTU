@@ -20,7 +20,13 @@
     <hr/>
 
     <div class="am-container">
-
+	<ul class="am-nav am-nav-pills am-nav-justify">
+	  <li><a href="#set">全局设置</a></li>
+	  <li><a href="#copyright">版权信息设置</a></li>
+	  <li><a href="#tips">提示语设计</a></li>
+	  <li><a href="#designer">区域/楼栋设计器</a></li>
+	</ul>
+	<hr>
     	<div class="am-panel am-panel-default">
 		  <div class="am-panel-hd am-cf" data-am-collapse="{target: '#set'}">全局设置<span class="am-icon-chevron-down am-fr" ></span></div>
 		  <div class="am-panel-bd am-collapse am-in" id="set"> 
@@ -35,10 +41,19 @@
 		    </div>
 
 		    <div class="am-form-group">
-		      <label for="doc-select-2">是否开放注册</label>
+		      <label for="doc-select-2">前台是否开放注册</label>
 		      <select id="doc-select-2" name="global[allowregister]">
 		        <option value="true">是</option>
 		        <option value="false">否</option>
+		      </select>
+		      <span class="am-form-caret"></span>
+		    </div>
+
+		    <div class="am-form-group">
+		      <label for="doc-select-3">前台用户登录方式</label>
+		      <select id="doc-select-3" name="global[quickreport]">
+		        <option value="true">姓名+学号</option>
+		        <option value="false">学号+密码</option>
 		      </select>
 		      <span class="am-form-caret"></span>
 		    </div>
@@ -47,6 +62,28 @@
 			</form>
 		  </div> 
 		  <div class="am-panel-footer">点击展开</div>  		
+    	</div>
+
+    	<div class="am-panel am-panel-default">
+    	<div class="am-panel-hd am-cf" data-am-collapse="{target: '#copyright'}">版权信息设置<span class="am-icon-chevron-down am-fr" ></span></div>
+    	<div class="am-panel-bd am-collapse am-in" id="copyright">
+    		<form action="{:U('Main/setCopyright')}" method="post" class="am-form am-form-horizontal">
+		    <div class="am-form-group">
+		      <label for="doc-cr-1">通用底部版权</label>
+		      <textarea class="" rows="5" id="doc-cr-1" name="copyright[buttom]" maxlength="255" placeholder="255字以内，不显示请留空">{$copyright.buttom}</textarea>
+		    </div>
+		    <div class="am-form-group">
+		      <label for="doc-cr-2">通知公告 关于我</label>
+		      <textarea class="" rows="5" id="doc-cr-2" name="copyright[aboutus]" maxlength="255" placeholder="255字以内">{$copyright.aboutus}</textarea>
+		    </div>
+		    <div class="am-form-group">
+		      <label for="doc-cr-3">通知公告 关于我 外部链接</label>
+		      <input id="doc-cr-3" class="" name="copyright[link]" value="{$copyright.link}" type="text" placeholder="输入完整URL（例如http://xxx）" />
+		    </div>
+		    <button type="submit" class="am-btn am-btn-block">确 定</button>		    
+		    </form>
+    	</div>
+    	<div class="am-panel-footer">点击展开</div> 
     	</div>
 
     	<div class="am-panel am-panel-default">
@@ -197,8 +234,21 @@ $(function() {
     $('#doc-select-2').find('option[value="{$global.allowregister}"]').attr('selected', 'selected');
     if (!$.AMUI.support.mutationobserver) {
       $('#doc-select-2').trigger('changed.selected.amui');
-    }    
+    }
+    $('#doc-select-3').find('option[value="{$global.quickreport}"]').attr('selected', 'selected');
+    if (!$.AMUI.support.mutationobserver) {
+      $('#doc-select-3').trigger('changed.selected.amui');
+    }        
     clearInterval(timer);
   },100);
+</script>
+<script type="text/javascript">
+$(function() {
+	$(".am-nav").find("a[href='"+location.hash+"']").parent().addClass('am-active');
+	window.onhashchange=function(){
+		$(".am-nav").find("li").removeClass('am-active');
+		$(".am-nav").find("a[href="+location.hash+"]").parent().addClass('am-active');
+	}
+});
 </script>
 <include file="Public/footer" />

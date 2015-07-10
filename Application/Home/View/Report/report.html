@@ -3,12 +3,12 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-<noempty name="tips">
+<notempty name="tips">
 <div class="am-alert am-alert-default" data-am-alert>
   <button type="button" class="am-close">&times;</button>
   <p>{$tips}</p>
 </div>
-</noempty>
+</notempty>
 <form action="" method="post" class="am-form" data-am-validator>
   <fieldset>
     <div class="am-form-group">
@@ -26,9 +26,14 @@
     </div>
 
     <div class="am-form-group">
-      <label for="report-2">报修寝室：</label>
-      <input type="text" id="report-2" name="location" placeholder="请输入寝室号" value="{$user['location']}" required/>
+      <label for="report-2">报修房间：</label>
+      <input type="text" id="report-2" name="location" placeholder="请输入房间号（或具体报修地点）" value="{$user['location']}" required/>
     </div>
+
+    <div class="am-form-group">
+      <label for="tel">联系电话：</label>
+      <input type="text" id="tel" name="tel" placeholder="请输入联系电话" value="{$user['tel']}" required/>
+    </div>    
 
     <div class="am-form-group">
       <label class="am-form-label">报修物品：</label>

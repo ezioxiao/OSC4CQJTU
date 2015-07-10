@@ -14,14 +14,36 @@ class SimpleController extends Controller {
     //统计
     public function __construct(){
         parent::__construct();
-    	$database = M('order');
-        $count = $database->where('time>:time')->bind(':time',strtotime(date('Y-m-d')))->count();
-        $this->assign('countToday',$count); 
-        $count = $database->where('status=0')->count();
+        if(session('?admin')){
+        $database = M('order');
+
+        $admin = M('admin')->where('username=:username')->bind(':username',session('admin'))->find();
+        $admin = json_decode($admin['location'],true);
+        if(!empty($admin['area']) && !empty($admin['building'])){
+            $where['area'] = array('in',$admin['area']);
+            $where['building'] = array('in',$admin['building']);
+            $where['_logic'] = 'or';
+            $map['_complex'] = $where;
+        }
+        elseif(!empty($admin['area']))$map['area'] = array('in',$admin['area']);
+        elseif(!empty($admin['building']))$map['building'] = array('in',$admin['building']);
+
+        $map['status'] = 0;
+        $count = $database->where($map)->count();
         $this->assign('countTodo',$count);  
-        $count = $database->where('status=1')->count();
-        $this->assign('countDoing',$count);   
-        $count = $database->where('status=2')->count();
-        $this->assign('countDone',$count);  
+
+        $map['status'] = 1;
+        $count = $database->where($map)->count();
+        $this->assign('countDoing',$count); 
+
+        $map['status'] = 2;
+        $count = $database->where($map)->count();
+        $this->assign('countDone',$count);
+
+        $map['time'] = array('gt',strtotime(date('Y-m-d')));
+        $map['status'] = array('neq',-1);//隐藏已取消报修的
+        $count = $database->where($map)->count();
+        $this->assign('countToday',$count);                      
+        }
     }
 }

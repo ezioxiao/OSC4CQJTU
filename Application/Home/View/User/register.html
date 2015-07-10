@@ -2,22 +2,27 @@
 <include file="Public/nav" />
 
 <div class="am-container">
-<noempty name="tips">
+<notempty name="tips">
 <div class="am-alert am-alert-default" data-am-alert>
   <button type="button" class="am-close">&times;</button>
   <p>{$tips}</p>
 </div>
-</noempty>
+</notempty>
     <form method="post" class="am-form" data-am-validator>
     <fieldset>
-      <label for="username">用户名:</label>
-      <input type="text" name="uid" id="username" placeholder="请输入用户名" required>
+      <label for="uid">学号:</label>
+      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号）" required>
       <br>
+      <if condition="$quickreport eq 'true'">
+      <label for="username">姓名:</label>
+      <input type="text" name="username" id="username" placeholder="请输入真实姓名" required>      
+      <else/>
       <label for="password">密码:</label>
       <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="长度6-20位" required>
       <br>
       <label for="password">确认密码:</label>
       <input type="password" minlength="6" maxlength="20" placeholder="请与上面输入的值一致" data-equal-to="#password" required>
+      </if>
       <br>
       <label for="verify">验证码:</label>
       <img src="{:U('User/v')}" onclick="$(this).attr('src','{:U('User/v')}')">

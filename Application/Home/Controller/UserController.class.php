@@ -10,10 +10,12 @@ class UserController extends SimpleController {
     public function login(){
     	if(session('?uid'))$this->redirect('order');
 
-    	//是否允许注册
+    	//获取站点配置
         $global = M('setting')->where("`key`='global'")->find();
         $global = json_decode($global['value'],true); 
-        $this->assign('allowregister',$global['allowregister']);  
+        //是否允许注册
+        $this->assign('allowregister',$global['allowregister']);
+        $this->assign('quickreport',$global['quickreport']);
 
     	if(IS_POST){
             $database = M('user');  
@@ -22,22 +24,29 @@ class UserController extends SimpleController {
             }         
             if(!$this->checkVerify(I('post.verify'))){
                 $this->error('验证码错误',U('User/login'));
-            }                 		
+            } 
+
     		$user = $database->where('uid = :uid')->bind(array(':uid'=>I('post.uid')))->find();
-            if(empty($user)){
-                $this->error('用户不存在',U('User/login'));
+            if(empty($user)){  
+                $this->error('用户不存在',U('User/login'));     
             }
-            $user = $database->where('uid = :uid and password = :password')->bind(array(':uid'=>I('post.uid'),':password'=>sha1(C('DB_PREFIX').I('post.password').'_'.$user['salt'])))->find();
-    		if(empty($user)){
-    			$this->error('密码不匹配',U('User/login'));
-    		}else{
-    			$data['lastip'] = get_client_ip();
-    			$data['lasttime'] = time();
-    			$database->where('uid=:uid')->bind(':uid',$user['uid'])->save($data);
-    			session('uid',$user['uid']);
-    			if(!empty($user['username']))session('username',$user['username']);
-    			$this->redirect('Main/index');
-    		}
+
+            //姓名+一卡通
+            if($global['quickreport']=='true'){
+	            $user = $database->where('uid = :uid and username = :username')->bind(array(':uid'=>I('post.uid'),':username'=>I('post.username')))->find();
+	    		if(empty($user))$this->error('信息不匹配',U('User/login'));
+            }else{//用户名+密码
+	            $user = $database->where('uid = :uid and password = :password')->bind(array(':uid'=>I('post.uid'),':password'=>sha1(C('DB_PREFIX').I('post.password').'_'.$user['salt'])))->find();
+	    		if(empty($user))$this->error('密码不匹配',U('User/login'));
+            }                		
+
+			$data['lastip'] = get_client_ip();
+			$data['lasttime'] = time();
+			$database->where('uid=:uid')->bind(':uid',$user['uid'])->save($data);
+			session('uid',$user['uid']);
+			if(!empty($user['username']))session('username',$user['username']);
+			if(!empty(I('get.returnURL')))redirect(base64_decode(I('get.returnURL')));
+			$this->redirect('Main/index');
     	}else{
 	        $tips = M('setting')->where("`key`='tips'")->find();
 	        $tips = json_decode($tips['value'],true); 
@@ -49,12 +58,16 @@ class UserController extends SimpleController {
     //用户注册
     public function register(){
     	if(session('?uid'))$this->redirect('order');
-    	//是否允许注册
+        //获取站点配置
         $global = M('setting')->where("`key`='global'")->find();
         $global = json_decode($global['value'],true); 
+        //是否允许注册
+        $this->assign('allowregister',$global['allowregister']);
+        $this->assign('quickreport',$global['quickreport']);
+
         if($global['allowregister']=='false')$this->error('站点已关闭注册');  	
     	if(IS_POST){
-    		$database = M('user');            
+    		$database = M('user');          
             if(!D("User")->create()){
                 $this->error(D("User")->getError(),U('User/register'));
             }
@@ -62,9 +75,14 @@ class UserController extends SimpleController {
                 $this->error('验证码错误',U('User/register'));
             }
             $data['uid'] = I('post.uid');
-            $salt = salt();
-            $data['salt'] = $salt;
-            $data['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$salt);
+            if($global['quickreport']=='false'){
+                $salt = salt();
+                $data['salt'] = $salt;
+                $data['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$salt);               
+            }else{
+                $data['username'] = I('post.username');
+            }
+
             $add = $database->data($data)->filter('strip_tags')->add();
             if($add){
             	$this->success('注册成功',U('User/login'));
@@ -81,7 +99,7 @@ class UserController extends SimpleController {
 
     //找回密码
     public function findpsw(){
-    	$this->error();
+    	
     }
 
     //用户注销
@@ -105,6 +123,11 @@ class UserController extends SimpleController {
     //个人信息设置
     public function setting(){
     	if(!session('?uid'))$this->redirect('login');
+    	//获取站点配置
+        $global = M('setting')->where("`key`='global'")->find();
+        $global = json_decode($global['value'],true); 
+        //是否开启快速报修
+        $this->assign('quickreport',$global['quickreport']);    	
     	$database = M('user');
     	if(IS_POST){   
             if (!$database->autoCheckToken($_POST)){
@@ -146,5 +169,23 @@ class UserController extends SimpleController {
     public function checkVerify($code, $id = ''){
         $verify = new \Think\Verify();
         return $verify->check($code, $id);
-    }      
+    }     
+
+    public function cancel(){
+    	if(!session('?uid'))$this->redirect('login');
+    	if(IS_AJAX && IS_POST){
+    		$database = M('order');
+    		$map['order'] = ':order';
+    		$map['user'] = ':user';
+    		$bind[':order'] = I('post.order');
+    		$bind[':user'] = session('uid');
+    		$order = $database->where($map)->bind($bind)->find();
+    		if(!empty($order) AND $order['status']==0){
+    			$data['status'] = -1;
+    			$data['canceltime'] = time();
+    			$cancel = $database->where($map)->bind($bind)->save($data);
+    			echo $cancel;
+    		}
+    	}
+    }
 }
