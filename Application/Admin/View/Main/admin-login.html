@@ -39,7 +39,7 @@
 
 			<div class="am-form-group">
 			  <label for="v">验证码</label>
-			  <img src="{:U('main/v')}" onclick="$(this).attr('src','{:U('Main/v')}')">
+			  <img src="{:U('main/v')}" onclick="$(this).attr('src','{:U('Main/v')}'+'?random='+Math.random())" class="am-img-responsive">
 			  <input type="text" name="verify" class="" id="v" placeholder="请输入验证码" required>
 			</div>
 
