@@ -24,6 +24,7 @@
     <div class="am-topbar-right">
       <if condition="!session('?uid')">
       <button onclick="location.href='{:U('User/login')}'" class="am-btn am-btn-primary am-topbar-btn am-btn-sm am-round"><span class="am-icon-user"></span> 用户登录</button>
+	  <button onclick='Microsoft.Translator.translate(document.body,"zh-CHS","en");' class="am-btn am-btn-default am-topbar-btn am-btn-sm am-round"><span class="am-icon-language"></span> Translator</button>
       <else/>
       <ul class="am-nav am-nav-pills am-topbar-nav">
       	<!--<li><a></a></li>-->
@@ -36,6 +37,21 @@
           <li><a href="{:U('User/logout')}"><span class="am-icon-sign-out"></span> 注销</a></li>
         </ul>
         </li>
+		<li class="am-dropdown" data-am-dropdown><a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">Translator <span class="am-icon-caret-down"></span></a>
+		<ul class="am-dropdown-content">
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","en");'><span class="am-icon-language"></span> English</a></li>
+			<li class="am-divider"></li>
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","zh-cht");'><span class="am-icon-language"></span> 繁體中文</a></li>
+			<li class="am-divider"></li>
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","ja");'><span class="am-icon-language"></span> 日本語</a></li>
+			<li class="am-divider"></li>
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","ko");'><span class="am-icon-language"></span> 한국어</a></li>
+			<li class="am-divider"></li>
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","fr");'><span class="am-icon-language"></span> Français</a></li>
+			<li class="am-divider"></li>
+			<li><a href='javascript:Microsoft.Translator.translate(document.body,"zh-CHS","de");'><span class="am-icon-language"></span> Deutsch</a></li>
+        </ul>
+        </li>		
       </ul>
       </if>
     </div>	

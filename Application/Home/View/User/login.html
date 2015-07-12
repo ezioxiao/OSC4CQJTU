@@ -13,14 +13,14 @@
       <label for="username">姓名:</label>
       <input type="text" name="username" id="username" placeholder="请输入真实姓名" required>
       <br>
-      <label for="uid">学号:</label><a href="#" class="am-fr">信息不匹配?</a>
-      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号）" required>
+      <label for="uid">识别码:</label><a href="javascript:modal_alert('请联系网站管理员解决');" class="am-fr">信息不匹配?</a>
+      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号/一卡通号）" required>
       <br>      
       <else/>
-      <label for="uid">学号:</label>
-      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号）" required>
+      <label for="uid">识别码:</label>
+      <input type="text" name="uid" id="uid" placeholder="请输入学号（或教职工号/一卡通号）" required>
       <br>
-      <label for="password">密码:</label><a href="#" class="am-fr">忘记密码?</a>
+      <label for="password">密码:</label><a href="javascript:modal_alert('请联系网站管理员解决');" class="am-fr">忘记密码?</a>
       <input type="password" minlength="6" maxlength="20" name="password" id="password" placeholder="请输入密码" required>
       <br>
       </if>
@@ -36,5 +36,21 @@
       </div>
     </form>
 </div>
-
+<div class="am-modal am-modal-alert" tabindex="-1" id="alert">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">操作提示</div>
+    <div class="am-modal-bd">
+      
+    </div>
+    <div class="am-modal-footer">
+      <span class="am-modal-btn">确定</span>
+    </div>
+  </div>
+</div>
+<script>
+  function modal_alert(string){
+  	$('#alert').find('.am-modal-bd').text(string);
+    $('#alert').modal();
+  }
+</script>
 <include file="Public/footer" />
