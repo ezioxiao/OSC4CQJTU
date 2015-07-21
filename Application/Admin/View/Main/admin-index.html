@@ -15,10 +15,10 @@
     </div>
 
     <ul class="am-avg-sm-1 am-avg-md-4 am-margin am-padding am-text-center admin-content-list ">
-      <li><a href="#" class="am-text-success"><span class="am-icon-btn am-icon-file-text"></span><br/>今日报修<br/>{$countToday}</a></li>
-      <li><a href="#" class="am-text-warning"><span class="am-icon-btn am-icon-briefcase"></span><br/>未处理<br/>{$countTodo}</a></li>
-      <li><a href="#" class="am-text-danger"><span class="am-icon-btn am-icon-recycle"></span><br/>处理中<br/>{$countDoing}</a></li>
-      <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br/>已处理<br/>{$countDone}</a></li>
+      <li><a href="{:U('Task/todo')}" class="am-text-success"><span class="am-icon-btn am-icon-file-text"></span><br/>今日报修<br/>{$countToday}</a></li>
+      <li><a href="{:U('Task/todo')}" class="am-text-warning"><span class="am-icon-btn am-icon-briefcase"></span><br/>未处理<br/>{$countTodo}</a></li>
+      <li><a href="{:U('Task/doing')}" class="am-text-danger"><span class="am-icon-btn am-icon-recycle"></span><br/>处理中<br/>{$countDoing}</a></li>
+      <li><a href="{:U('Task/done')}" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br/>已处理<br/>{$countDone}</a></li>
     </ul>
 
     <div class="am-padding">

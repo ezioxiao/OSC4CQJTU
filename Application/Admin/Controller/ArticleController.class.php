@@ -9,8 +9,8 @@ class ArticleController extends SimpleController {
     	$this->assign('list',$list);
     	$count = $database->count();
     	$this->assign('count',$count);
-	$page = pagination($count);
-	$this->assign('page',$page);
+		$page = pagination($count);
+		$this->assign('page',$page);
         $this->display('admin-table');
     }	
 
@@ -25,6 +25,7 @@ class ArticleController extends SimpleController {
             $data['content'] = I('post.content');
             $data['time'] = time();
             $data['view'] = 0;
+            $data['author'] = session('admin');
             $add = $database->data($data)->add();
             if($add){
                     $this->success('添加成功',U('Article/index'));

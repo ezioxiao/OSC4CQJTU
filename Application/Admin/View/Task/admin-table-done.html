@@ -49,6 +49,8 @@
       <div class="am-u-sm-12 am-u-md-3">
         <div class="am-input-group am-input-group-sm">
           <input type="text" name="order" placeholder="输入工单号" class="am-form-field">
+          <input type="hidden" name="startDate" id="startDate">
+          <input type="hidden" name="endDate" id="endDate">
           <span class="am-input-group-btn">
             <button class="am-btn am-btn-default" type="submit">搜索</button>
           </span>
@@ -56,6 +58,15 @@
       </div>
       </form>
     </div>
+
+	<div class="am-g">
+	  <div class="am-u-sm-6">
+	    <button type="button" class="am-btn am-btn-default am-margin-right" id="my-start">开始日期</button><span id="my-startDate">{:empty(I('get.startDate'))?date('Y-m-d',strtotime('-1 month')):I('get.startDate')}</span>
+	  </div>
+	  <div class="am-u-sm-6">
+	    <button type="button" class="am-btn am-btn-default am-margin-right" id="my-end">结束日期</button><span id="my-endDate">{:empty(I('get.endDate'))?date('Y-m-d'):I('get.endDate')}</span>
+	  </div>
+	</div>    
 
     <div class="am-g">
       <div class="am-u-sm-12">
@@ -107,6 +118,35 @@
   </div>
   <!-- content end -->
 </div>
+<script>
+  $(function() {
+    var startDate = new Date('{:empty(I('get.startDate'))?date('Y-m-d',strtotime('-1 month')):I('get.startDate')}');
+    var endDate = new Date('{:empty(I('get.endDate'))?date('Y-m-d'):I('get.endDate')}');
+    $('#my-start').datepicker().
+      on('changeDate.datepicker.amui', function(event) {
+        if (event.date.valueOf() > endDate.valueOf()) {
+          modal_alert('开始日期应小于结束日期！');
+        } else {
+          startDate = new Date(event.date);
+          $('#my-startDate').text($('#my-start').data('date'));
+          $('#startDate').val($('#my-start').data('date'));
+        }
+        $(this).datepicker('close');
+      });
+
+    $('#my-end').datepicker().
+      on('changeDate.datepicker.amui', function(event) {
+        if (event.date.valueOf() < startDate.valueOf()) {
+          modal_alert('结束日期应大于开始日期！');
+        } else {
+          endDate = new Date(event.date);
+          $('#my-endDate').text($('#my-end').data('date'));
+          $('#endDate').val($('#my-end').data('date'));
+        }
+        $(this).datepicker('close');
+      });
+  });
+</script>
 <script>
   $(function(){
   //全选的实现

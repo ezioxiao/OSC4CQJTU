@@ -67,7 +67,7 @@
       <h3 class="am-article-title blog-title">
         <a>{$article['title']}</a>
       </h3>
-      <h4 class="am-article-meta blog-meta">posted on {:date('Y年m月d日',$article['time'])} , {$article['view']} views</h4>
+      <h4 class="am-article-meta blog-meta">posted on {:date('Y年m月d日',$article['time'])} by {$value['author']} , {$article['view']} views</h4>
       <div class="am-g blog-content">
         <div class="am-u-sm-12">
           {:htmlspecialchars_decode($article['content'])}

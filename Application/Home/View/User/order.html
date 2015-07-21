@@ -10,10 +10,18 @@
 	<tbody>
   <foreach name="list" item="vo" >
         <if condition="$vo.emerg eq 1"><tr class="am-active"><else/><tr></if>
-            <td>{$vo.order}</td>
-            <td class="am-show-md-up">{:empty($vo['good'])?'-':$vo['good']}</td>
-            <td class="am-show-md-up">{:empty($vo['building'])?'-':building($vo['area'],$vo['building'])}</td>
-            <td class="am-show-md-up">{$vo.location}</td>
+        <if condition="$vo.emerg eq 1">
+        	<tr class="am-active">
+        	<td>{$vo.order}</td>
+        	<td class="am-show-md-up">{$vo.description}</td>
+        	<td class="am-show-md-up" colspan="2">{$vo.location}</td>
+        <else/>
+			<tr>
+	        <td>{$vo.order}</td>
+	        <td class="am-show-md-up"><empty name="vo.building">-<else/>{$vo.good}</empty></td>
+	        <td class="am-show-md-up"><empty name="vo.building">-<else/>{:building($vo['area'],$vo['building'])}</empty></td>
+			<td class="am-show-md-up">{$vo.location}</td>
+        </if>
             <td class="am-show-md-up">{:date('Y年m月d日',$vo['time'])}</td>
             <td>{:status($vo['status'])}</td>
             <td><if condition="$vo['status'] eq 0"><a href="javascript:cancel('{$vo.order}');">取消</a></if></td>

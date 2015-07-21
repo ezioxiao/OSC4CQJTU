@@ -52,7 +52,16 @@ class TaskController extends SimpleController {
                 $this->assign('building',$admin['building']);
                 if(!empty(I('get.building')))$map['building'] = array('in',I('get.building'));
             }
-
+            //按时间搜索
+            if(!empty(I('post.startDate')) && !empty(I('post.endDate'))){
+                $map['time'] = array(array('gte',strtotime(I('post.startDate'))),array('lte',strtotime(I('post.endDate'))));
+            }
+            elseif(!empty(I('post.startDate'))){
+                $map['time'] = array('gte',strtotime(I('post.startDate')));
+            }
+            elseif(!empty(I('post.endDate'))){
+                $map['time'] = array('lte',strtotime(I('post.endDate')));
+            }
             $map['status'] = 0;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
             if(!empty(I('get.order')))$map['order'] = array('like','%'.I('get.order').'%');
@@ -121,6 +130,16 @@ class TaskController extends SimpleController {
                 $this->assign('building',$admin['building']);
                 if(!empty(I('get.building')))$map['building'] = array('in',I('get.building'));
             }
+            //按时间搜索
+            if(!empty(I('post.startDate')) && !empty(I('post.endDate'))){
+                $map['time'] = array(array('gte',strtotime(I('post.startDate'))),array('lte',strtotime(I('post.endDate'))));
+            }
+            elseif(!empty(I('post.startDate'))){
+                $map['time'] = array('gte',strtotime(I('post.startDate')));
+            }
+            elseif(!empty(I('post.endDate'))){
+                $map['time'] = array('lte',strtotime(I('post.endDate')));
+            }            
             $map['status'] = 1;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
             if(!empty(I('get.order')))$map['order'] = array('like','%'.I('get.order').'%');            
@@ -167,6 +186,7 @@ class TaskController extends SimpleController {
     	}else{
             $admin = M('admin')->where('username=:username')->bind(':username',session('admin'))->find();
             $admin = json_decode($admin['location'],true);
+            //按区域搜索
             if(!empty($admin['area']) && !empty($admin['building'])){
                 $where['area'] = array('in',$admin['area']);
                 $this->assign('area',$admin['area']);
@@ -186,6 +206,16 @@ class TaskController extends SimpleController {
                 $map['building'] = array('in',$admin['building']);
                 $this->assign('building',$admin['building']);
                 if(!empty(I('get.building')))$map['building'] = array('in',I('get.building'));
+            }
+            //按时间搜索
+            if(!empty(I('post.startDate')) && !empty(I('post.endDate'))){
+                $map['time'] = array(array('gte',strtotime(I('post.startDate'))),array('lte',strtotime(I('post.endDate'))));
+            }
+            elseif(!empty(I('post.startDate'))){
+                $map['time'] = array('gte',strtotime(I('post.startDate')));
+            }
+            elseif(!empty(I('post.endDate'))){
+                $map['time'] = array('lte',strtotime(I('post.endDate')));
             }
             $map['status'] = 2;
             if(!empty(I('get.emerg/d')))$map['emerg'] = I('get.emerg/d');
