@@ -164,8 +164,8 @@
       }
     });
   });  
-  $('tr').click(function(){
-    $(this).find('.ids').click();
+  $('.am-table>tbody>tr>td:gt(0)').click(function(){
+    $(this).parent().find('.ids').click();
   });
   $('#markTodo').click(function(){
     $.ajax({

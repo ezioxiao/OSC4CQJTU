@@ -29,20 +29,20 @@ class SimpleController extends Controller {
         elseif(!empty($admin['building']))$map['building'] = array('in',$admin['building']);
 
         $map['status'] = 0;
-        $count = $database->where($map)->count();
+        $count = $database->cache(true)->where($map)->count();
         $this->assign('countTodo',$count);  
 
         $map['status'] = 1;
-        $count = $database->where($map)->count();
+        $count = $database->cache(true)->where($map)->count();
         $this->assign('countDoing',$count); 
 
         $map['status'] = 2;
-        $count = $database->where($map)->count();
+        $count = $database->cache(true)->where($map)->count();
         $this->assign('countDone',$count);
 
         $map['time'] = array('gt',strtotime(date('Y-m-d')));
         $map['status'] = array('neq',-1);//隐藏已取消报修的
-        $count = $database->where($map)->count();
+        $count = $database->cache(true)->where($map)->count();
         $this->assign('countToday',$count);                      
         }
     }

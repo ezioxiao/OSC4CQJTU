@@ -26,7 +26,7 @@ class ArticleController extends SimpleController {
             $data['time'] = time();
             $data['view'] = 0;
             $data['author'] = session('admin');
-            $add = $database->data($data)->add();
+            $add = $database->strict(true)->data($data)->add();
             if($add){
                     $this->success('添加成功',U('Article/index'));
             }else{

@@ -202,7 +202,7 @@ class UserController extends SimpleController {
             $data['building'] = I('post.building');
             $data['tel'] = I('post.tel');
             $data['location'] = I('post.location');                 
-	        $add = $database->data($data)->filter('strip_tags')->add();	
+	        $add = $database->strict(true)->data($data)->filter('strip_tags')->add();	
 	    	if($add){
 	    		$this->success('用户增加成功');
 	    	}else{
@@ -256,7 +256,7 @@ class UserController extends SimpleController {
             if(in_array(I('post.right/d'), array(0,1)))$data['right'] = I('post.right/d');
 	        $data['salt'] = salt();
 	        $data['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$data['salt']);
-	        $add = $database->data($data)->filter('strip_tags')->add();	
+	        $add = $database->strict(true)->data($data)->filter('strip_tags')->add();	
 	    	if($add){
 	    		$this->success('用户增加成功');
 	    	}else{

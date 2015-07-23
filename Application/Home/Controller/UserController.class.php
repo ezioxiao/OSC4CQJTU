@@ -75,6 +75,7 @@ class UserController extends SimpleController {
                 $this->error('验证码错误',U('User/register'));
             }
             $data['uid'] = I('post.uid');
+			if($database->where($map)->find())$this->error('用户已存在',U('User/register'));
             if($global['quickreport']=='false'){
                 $salt = salt();
                 $data['salt'] = $salt;
@@ -83,7 +84,7 @@ class UserController extends SimpleController {
                 $data['username'] = I('post.username');
             }
 
-            $add = $database->data($data)->filter('strip_tags')->add();
+            $add = $database->strict(true)->data($data)->filter('strip_tags')->add();
             if($add){
             	$this->success('注册成功',U('User/login'));
             }else{
@@ -183,7 +184,7 @@ class UserController extends SimpleController {
     		if(!empty($order) AND $order['status']==0){
     			$data['status'] = -1;
     			$data['canceltime'] = time();
-    			$cancel = $database->where($map)->bind($bind)->save($data);
+    			$cancel = $database->lock(true)->where($map)->bind($bind)->save($data);
     			echo $cancel;
     		}
     	}

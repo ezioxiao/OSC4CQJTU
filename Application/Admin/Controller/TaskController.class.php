@@ -20,13 +20,13 @@ class TaskController extends SimpleController {
 		    		$database->status = '0';
 		    		$database->donetime = '';
 		    		$database->dotime = '';
-					$res = $database->where('`order`=:order')->bind(':order',$v)->save();	
+					$res = $database->lock(true)->where('`order`=:order')->bind(':order',$v)->save();	
     			}
     		}else{
 	    		$database->status = '0';
 	    		$database->donetime = '';
 	    		$database->dotime = '';   			
-    			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
+    			$res = $database->lock(true)->where('`order`=:order')->bind(':order',$order)->save();
     		}
     		echo $res;
     	}else{
@@ -96,7 +96,7 @@ class TaskController extends SimpleController {
     				$database->donetime = '';
                     $database->doctor = session('admin'); //记录操作管理员
                     if(!empty(I('post.repairer')))$database->repairer = I('post.repairer'); //记录维修工人
-    				$res = $database->where('`order`=:order')->bind(':order',$v)->save();	
+    				$res = $database->lock(true)->where('`order`=:order')->bind(':order',$v)->save();	
     			}
     		}else{
     			$database->status = '1';
@@ -104,7 +104,7 @@ class TaskController extends SimpleController {
     			$database->donetime = ''; 
                 $database->doctor = session('admin'); //记录操作管理员 
                 if(!empty(I('post.repairer')))$database->repairer = I('post.repairer'); //记录维修工人  			
-    			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
+    			$res = $database->lock(true)->where('`order`=:order')->bind(':order',$order)->save();
     		}
     		echo $res;
     	}else{  
@@ -173,14 +173,14 @@ class TaskController extends SimpleController {
 		    		$database->donetime = time();  
                     $database->doctor = session('admin'); //记录操作管理员
                     if(!empty(I('post.repairer')))$database->repairer = I('post.repairer'); //记录维修工人                      				
-    				$res = $database->where('`order`=:order')->bind(':order',$v)->save();	
+    				$res = $database->lock(true)->where('`order`=:order')->bind(':order',$v)->save();	
     			}
     		}else{
 	    		$database->status = '2';
 	    		$database->donetime = time();  
                 $database->doctor = session('admin'); //记录操作管理员
                 if(!empty(I('post.repairer')))$database->repairer = I('post.repairer'); //记录维修工人                  			
-    			$res = $database->where('`order`=:order')->bind(':order',$order)->save();
+    			$res = $database->lock(true)->where('`order`=:order')->bind(':order',$order)->save();
     		}
     		echo $res;
     	}else{

@@ -4,13 +4,13 @@ use Think\Controller;
 class MainController extends SimpleController {
     public function index(){
     	//公告
-    	$notice = M('article')->order('acid desc')->limit(5)->select();
+    	$notice = M('article')->cache(true)->order('acid desc')->limit(5)->select();
         $this->assign('notice',$notice);
     	//统计
-    	$stat['today'] = M('order')->where('time>:time')->bind(':time',strtotime(date("Y-m-d")))->count();
-		$stat['todo'] = M('order')->where('status=0')->count();
-    	$stat['doing'] = M('order')->where('status=1')->count();
-    	$stat['done'] = M('order')->where('status=2')->count();
+    	$stat['today'] = M('order')->cache(true)->where('time>:time')->bind(':time',strtotime(date("Y-m-d")))->count();
+		$stat['todo'] = M('order')->cache(true)->where('status=0')->count();
+    	$stat['doing'] = M('order')->cache(true)->where('status=1')->count();
+    	$stat['done'] = M('order')->cache(true)->where('status=2')->count();
         $this->assign('stat',$stat);
     	//最新报修
         //$map['status'] = array('neq',-1);//是否显示已取消工单

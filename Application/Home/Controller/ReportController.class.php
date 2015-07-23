@@ -35,7 +35,7 @@ class ReportController extends SimpleController {
     		$data['time'] = time();//时间
     		$data['status'] = 0;//状态 未处理0 处理中1 已处理2
     		$data['emerg'] = 0;//是否紧急 普通0 紧急1
-    		$add = $database->data($data)->filter('strip_tags')->add();
+    		$add = $database->strict(true)->data($data)->filter('strip_tags')->add();
     		if($add){
     			$this->success('报修提交成功',U('User/order'));
     		}else{
@@ -77,7 +77,7 @@ class ReportController extends SimpleController {
     		$data['time'] = time();//时间
     		$data['status'] = 0;//状态 未处理0 处理中1 已处理2
     		$data['emerg'] = 1;//是否紧急 普通0 紧急1
-    		$add = $database->data($data)->filter('strip_tags')->add();
+    		$add = $database->strict(true)->data($data)->filter('strip_tags')->add();
     		if($add){
     			$this->success('报修提交成功',U('User/order'));
     		}else{

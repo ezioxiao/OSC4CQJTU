@@ -31,7 +31,7 @@
       <div class="am-btn-group am-btn-group-justify am-cf">
         <input type="submit" value="登 录" class="am-btn am-btn-primary am-radius am-fl">
         <if condition="$allowregister eq 'true'">
-        <input type="button" onclick="window.location.href='{:U('User/register')}'" value="注 册" class="am-btn am-btn-default am-radius am-fr <if condition="$allowregister eq 'false'">am-disabled</if>">
+        <input type="button" onclick="window.location.href='{:U('User/register')}'" value="木有账户?点此注册" class="am-btn am-btn-default am-radius am-fr <if condition="$allowregister eq 'false'">am-disabled</if>">
         </if>
       </div>
     </form>
