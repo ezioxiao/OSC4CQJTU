@@ -102,7 +102,9 @@ $(function(){
       }
     });
   });
-
+  $('.am-table>tbody>tr>td:gt(0)').click(function(){
+    $(this).parent().find('.ids').click();
+  });
   $('#markDel').click(function(){
     var string = '';
     var config = {

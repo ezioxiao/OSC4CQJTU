@@ -93,7 +93,9 @@ $(function(){
       }
     });
   });
-
+  $('.am-table>tbody>tr>td:gt(0)').click(function(){
+    $(this).parent().find('.ids').click();
+  });
   $('#Del').click(function(){
     $.ajax({
       'type':'post',

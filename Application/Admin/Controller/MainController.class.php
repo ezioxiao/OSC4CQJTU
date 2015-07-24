@@ -45,29 +45,29 @@ class MainController extends SimpleController {
             date('y-m-d',strtotime('-1 days')),
             date('y-m-d')));
         $stat['todo'] = json_encode(array(
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
-            M('order')->cache(true)->where('status=0 and time>'.strtotime(date('y-m-d')))->count()));
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
+            M('order')->cache(true,60)->where('status=0 and time>'.strtotime(date('y-m-d')))->count()));
         $stat['doing'] = json_encode(array(
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
-            M('order')->cache(true)->where('status=1 and time>'.strtotime(date('y-m-d')))->count()));
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
+            M('order')->cache(true,60)->where('status=1 and time>'.strtotime(date('y-m-d')))->count()));
         $stat['done'] = json_encode(array(
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
-            M('order')->cache(true)->where('status=2 and time>'.strtotime(date('y-m-d')))->count()));
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-6 days').' and time<'.strtotime('-5 days'))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-5 days').' and time<'.strtotime('-4 days'))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-4 days').' and time<'.strtotime('-3 days'))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-3 days').' and time<'.strtotime('-2 days'))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-2 days').' and time<'.strtotime('-1 days'))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime('-1 days').' and time<'.strtotime(date('y-m-d')))->count(),
+            M('order')->cache(true,60)->where('status=2 and time>'.strtotime(date('y-m-d')))->count()));
         $this->assign('stat',$stat);
 
         //仅显示范围内的紧急报修
