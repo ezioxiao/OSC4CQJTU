@@ -52,11 +52,21 @@
 		    <div class="am-form-group">
 		      <label for="doc-select-3">前台用户登录方式</label>
 		      <select id="doc-select-3" name="global[quickreport]">
-		        <option value="true">姓名+学号</option>
-		        <option value="false">学号+密码</option>
+		        <option value="true">姓名+身份识别码</option>
+		        <option value="false">身份识别码+密码</option>
 		      </select>
 		      <span class="am-form-caret"></span>
 		    </div>
+			
+		    <div class="am-form-group">
+		      <label for="doc-select-4">UC登录模式</label>
+		      <select id="doc-select-4" name="global[uclogin]">
+				<option value="">关闭</option>
+		        <option value="normal">默认账户密码验证</option>
+		        <option value="diy">自定义表验证</option>
+		      </select>
+		      <span class="am-form-caret"></span>
+		    </div>			
 
 		    <button type="submit" class="am-btn am-btn-block">确 定</button>
 			</form>

@@ -25,17 +25,63 @@ class UserController extends SimpleController {
             if(!$this->checkVerify(I('post.verify'))){
                 $this->error('验证码错误',U('User/login'));
             } 
+			
+			if($global['quickreport']=='false' && $global['uclogin']=='normal'){
+				$uc = new \Ucenter\Client\Client();
+				$name = mb_convert_encoding(I('post.username'),'gbk','utf-8');
+				$password = mb_convert_encoding(I('post.password'),'gbk','utf-8');
+				list($uid, $username, $uc_password, $email) = $uc -> uc_user_login($name, $password);
+				I('post.uid') = mb_convert_encoding($uid,'utf-8','gbk');
+				I('post.username') = mb_convert_encoding($username,'utf-8','gbk');
+				I('post.password') = mb_convert_encoding($uc_password,'utf-8','gbk');
+				//$email = mb_convert_encoding($email,'utf-8','gbk');
+			}
 
     		$user = $database->where('uid = :uid')->bind(array(':uid'=>I('post.uid')))->find();
-            if(empty($user)){  
-                $this->error('用户不存在',U('User/login'));     
+            if(empty($user)){
+				$oauth = A('Oauth','Event');
+				
+				//UC登陆
+				if($global['quickreport']=='false' && $global['uclogin']=='normal'){
+
+					if(I('post.uid') > 0) {
+						I('post.username') = strtolower(I('post.username'));
+					} elseif(I('post.uid') == -1) {
+						$this -> error('登陆失败:用户不存在,或者被删除');
+					} elseif(I('post.uid') == -2) {
+						$this -> error('登陆失败:密码错');
+					} else {
+						$this -> error('登陆失败:未定义');
+					}
+
+					$add['password'] = sha1(C('DB_PREFIX').I('post.password').'_'.$add['salt']);
+				}
+				
+				/* UC自定义表验证登陆 */
+				if($global['quickreport']=='true'  && $global['uclogin']=='diy'){
+					//$oauth->tablename = '';
+					//$oauth->map = array('id'=>':id');
+					//$oauth->bind = array(':id'=>I('post.id'));
+					//$info = $oauth->uc();
+					//if(!$info)$this->error('用户不存在',U('User/login'));
+					//$add['password'] = sha1(C('DB_PREFIX'). $password .'_'.$add['salt']);					
+				}
+						
+				if(!empty($add['password'])){
+					//验证通过写入用户数据
+					$add['uid'] = $uid;
+					$add['username'] = $info['stuname'];
+					$add['salt'] = salt();				
+					M('user')->add($this->add,$options=array(),$replace=true);					
+				}
+
             }
 
-            //姓名+一卡通
+            //姓名+识别码
             if($global['quickreport']=='true'){
 	            $user = $database->where('uid = :uid and username = :username')->bind(array(':uid'=>I('post.uid'),':username'=>I('post.username')))->find();
 	    		if(empty($user))$this->error('信息不匹配',U('User/login'));
-            }else{//用户名+密码
+            }else{//识别码+密码
 	            $user = $database->where('uid = :uid and password = :password')->bind(array(':uid'=>I('post.uid'),':password'=>sha1(C('DB_PREFIX').I('post.password').'_'.$user['salt'])))->find();
 	    		if(empty($user))$this->error('密码不匹配',U('User/login'));
             }                		
