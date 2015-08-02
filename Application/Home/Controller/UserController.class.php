@@ -31,9 +31,9 @@ class UserController extends SimpleController {
 				$name = mb_convert_encoding(I('post.username'),'gbk','utf-8');
 				$password = mb_convert_encoding(I('post.password'),'gbk','utf-8');
 				list($uid, $username, $uc_password, $email) = $uc -> uc_user_login($name, $password);
-				I('post.uid') = mb_convert_encoding($uid,'utf-8','gbk');
-				I('post.username') = mb_convert_encoding($username,'utf-8','gbk');
-				I('post.password') = mb_convert_encoding($uc_password,'utf-8','gbk');
+				$_GET['uid'] = mb_convert_encoding($uid,'utf-8','gbk');
+				$_GET['username'] = mb_convert_encoding($username,'utf-8','gbk');
+				$_GET['password'] = mb_convert_encoding($uc_password,'utf-8','gbk');
 				//$email = mb_convert_encoding($email,'utf-8','gbk');
 			}
 
@@ -45,7 +45,7 @@ class UserController extends SimpleController {
 				if($global['quickreport']=='false' && $global['uclogin']=='normal'){
 
 					if(I('post.uid') > 0) {
-						I('post.username') = strtolower(I('post.username'));
+						$_POST['username'] = strtolower(I('post.username'));
 					} elseif(I('post.uid') == -1) {
 						$this -> error('登陆失败:用户不存在,或者被删除');
 					} elseif(I('post.uid') == -2) {

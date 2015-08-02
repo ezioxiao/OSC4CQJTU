@@ -26,6 +26,36 @@
 .am-panel{
 	margin-top:20px
 }
+ul.timeline {
+	margin-left:25px;
+	border-left:2px solid #ddd;
+	margin-bottom: 0px;
+    padding-top: 25px;
+    padding-bottom: 25px;	
+}
+ul.timeline li{
+	margin-left:-42px;
+	list-style:none;
+}
+ul.timeline b{
+	width:8px;
+	height:8px;
+	background:#fff;
+	border:2px solid #555;
+	margin-left:5px;
+	margin-right:10px;
+	margin-top:10px;
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	overflow:hidden;
+	display:inline-block;
+	float:left;
+}
+ul.timeline p{
+	padding-left:22px;
+	line-height:0px;
+}
 </style>
 <include file="Public/nav" />
 
@@ -38,57 +68,116 @@
 </notempty>
 <div class="am-panel am-panel-default">
   <div class="am-panel-hd">工单进度</div>
-  <div class="am-panel-bd">
+  <div class="am-panel-bd" style="padding:0">
+  <ul class="timeline">
   <if condition="!empty($detail['canceltime'])" >
-    <li>{:date('Y年m月d日 H:i:s',$detail['canceltime'])} 用户取消报修</li>
+    <li><b></b>{:date('Y年m月d日 H:i:s',$detail['canceltime'])} <p>用户取消报修</p></li>
   </if>   
   <if condition="!empty($detail['donetime'])" >
-  	<li>{:date('Y年m月d日 H:i:s',$detail['donetime'])} 工单处理完毕</li>
+  	<li><b></b>{:date('Y年m月d日 H:i:s',$detail['donetime'])} <p>工单处理完毕</p></li>
   </if>  
   <if condition="!empty($detail['dotime'])" >
-  	<li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 正在处理</li>
-    <li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} 分派维修人员 <span class="am-text-primary">{$detail.repairer}</span></li>
-    <li>{:date('Y年m月d日 H:i:s',$detail['dotime'])} <span class="am-text-primary">{$detail.doctor}</span> 已确认工单</li>
+  	<li><b></b>{:date('Y年m月d日 H:i:s',$detail['dotime'])} <p>正在处理</p></li>
+    <li><b></b>{:date('Y年m月d日 H:i:s',$detail['dotime'])} <p>分派维修人员 <span class="am-text-primary">{$detail.repairer}</span></p></li>
+    <li><b></b>{:date('Y年m月d日 H:i:s',$detail['dotime'])} <p><span class="am-text-primary">{$detail.doctor}</span> 已确认工单</p></li>
   </if>  
-    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 系统生成工单号 <span class="am-text-primary">{$detail.order}</span></li>
-    <li>{:date('Y年m月d日 H:i:s',$detail['time'])} 用户提交报修</li>
+    <li><b></b>{:date('Y年m月d日 H:i:s',$detail['time'])} <p>系统生成工单号 <span class="am-text-primary">{$detail.order}</span></p></li>
+    <li><b></b>{:date('Y年m月d日 H:i:s',$detail['time'])} <p>用户提交报修</p></li>
+	</ul>
   </div>
 </div>
 
+<div class="am-g">
+<div class="am-u-md-6">
+	<div class="am-panel am-panel-default">
+	  <div class="am-panel-hd">报修信息</div>
+	  <div class="am-panel-bd" style="padding:0">
+		<ul class="timeline">
+		<switch name="detail.emerg">
+		<case value="0">
+		<li><b></b>报修类型<p>普通</p></li>
+		<li><b></b>报修区域<p>{:area($detail['area'])}</p></li>
+		<li><b></b>报修楼栋<p>{:building($detail['area'],$detail['building'])}</p></li>
+		<li><b></b>报修寝室<p>{$detail.location}</p></li>
+		<li><b></b>报修物品<p>{$detail.good}</p></li>
+		<li><b></b>故障描述<p>{:empty($detail[description])?'无':$detail[description]}</p></li>
+		</case>
+		<case value="1">
+		<li><b></b>报修类型<p>紧急</p></li>
+		<li><b></b>报修区域<p>{:area($detail['area'])}</p></li>
+		<li><b></b>报修地点<p>{$detail.location}</p></li>
+		<li><b></b>故障描述<p>{:empty($detail[description])?'无':$detail[description]}</p></li>    
+		</case>
+		</switch>
+		</ul>
+	  </div>
+	</div>
+</div>
+<div class="am-u-md-6">
+	<div class="am-panel am-panel-default">
+	  <div class="am-panel-hd">用户信息</div>
+	  <div class="am-panel-bd" style="padding:0">
+	  <ul class="timeline">
+		<if condition="($user['uid'] eq session('uid')) or session('?admin')">
+		<li><b></b>报修用户<p>{$user.uid}</p></li>
+		<li><b></b>联系电话<p>{$user.tel}</p></li>
+		<else/>
+		<li><b></b>仅本人和管理员可见</li>
+		</if>
+		</ul>	
+	  </div>
+	</div>
+</div>
+</div>
+<!--//TODO
 <div class="am-panel am-panel-default">
-  <div class="am-panel-hd">报修信息</div>
+  <div class="am-panel-hd">用户评价</div>
   <div class="am-panel-bd">
-    <switch name="detail.emerg">
-    <case value="0">
-    <li>报修类型：普通</li>
-    <li>报修区域：{:area($detail['area'])}</li>
-    <li>报修楼栋：{:building($detail['area'],$detail['building'])}</li>
-    <li>报修寝室：{$detail.location}</li>
-    <li>报修物品：{$detail.good}</li>
-    <li>故障描述：{$detail.description}</li>
-    </case>
-    <case value="1">
-    <li>报修类型：紧急</li>
-    <li>报修区域：{:area($detail['area'])}</li>
-    <li>报修地点：{$detail.location}</li>
-    <li>故障描述：{$detail.description}</li>    
-    </case>
-    </switch>
+	<form class="am-form am-form-horizontal">
+		<div class="am-input-group">
+		  <input type="text" class="am-form-field" placeholder="说点什么...">
+		  <span class="am-input-group-btn">
+			<button class="am-btn am-btn-default" type="button">提交</button>
+		  </span>
+		</div>
+	</form>
+	<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+	<ul class="am-comments-list">
+	 <li class="am-comment">
+	  <div class="am-comment-main"> 
+		<header class="am-comment-hd">
+		  <div class="am-comment-meta">
+			<a href="#link-to-user" class="am-comment-author">用户</a>
+			评价于 <time datetime="">...</time>
+		  </div>
+		</header>
+		<div class="am-comment-bd">...</div>
+	  </div>
+	 </li>
+	 <li class="am-comment am-comment-flip am-comment-highlight">  
+	  <div class="am-comment-main">
+		<header class="am-comment-hd">
+		  <div class="am-comment-meta">
+			<a href="#link-to-user" class="am-comment-author">管理员</a>
+			回复于 <time datetime="">...</time>
+		  </div>
+		</header>
+		<div class="am-comment-bd">...</div>
+	  </div>  
+	 </li> 
+	</ul>
+	<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+	<form class="am-form am-form-horizontal">
+		<div class="am-input-group">
+		  <input type="text" class="am-form-field" placeholder="说点什么...">
+		  <span class="am-input-group-btn">
+			<button class="am-btn am-btn-default" type="button">回复</button>
+		  </span>
+		</div>
+	</form>
   </div>
 </div>
-
-<div class="am-panel am-panel-default">
-  <div class="am-panel-hd">用户信息</div>
-  <div class="am-panel-bd">
-    <if condition="($user['uid'] eq session('uid')) or session('?admin')">
-    <li>报修用户：{$user.uid}</li>
-    <li>联系电话：{$user.tel}</li>
-    <else/>
-    仅本人和管理员可见
-    </if>
-  </div>
-</div>
-
+-->
 </div>
 
 <include file="Public/footer" />
