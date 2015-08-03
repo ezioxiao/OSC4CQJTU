@@ -103,9 +103,49 @@ class ReportController extends SimpleController {
             $tips = json_decode($tips['value'],true); 
             $this->assign('tips',$tips['detail']);             
             $user = M('user')->where('uid = :uid')->bind(':uid',$detail['user'])->find(); 
+			//用户最新评价
+			$rank['user'] = M('rank')->where("`order` = :order and `type`='0'")->bind(':order',I('get.order'))->order('time desc')->find();
+			//管理最新回复
+			$rank['admin'] = M('rank')->where("`order` = :order and `type`='1'")->bind(':order',I('get.order'))->order('time desc')->find();
             $this->assign('user',$user); 
     		$this->assign('detail',$detail);
+			$this->assign('rank',$rank);
     		$this->display('detail');
     	}
     }
+	
+	//评价与回复
+	public function rank(){
+		if(!session('?admin') or !session('?uid'))$this->error('非法访问');
+		if(IS_POST){
+			$data['order'] = I('get.order');
+			$order = M('order')->where($data)->find();
+			if(time()-$order['time']>3600*24*3)$this->error('评价超时');
+			if(session('?uid') and I('get.type')==0){
+				$data['user']=session('uid');
+				if(session('uid') != $order['user'])$this->error('操作无权限');
+				$data['type']=0;
+			}
+			elseif(session('?admin') and I('get.type')==1){
+				$data['user']=session('admin');
+				$data['type']=1;
+			}
+			else{
+				$this->error('参数错误');
+			}
+			$data['content'] = I('post.rankc');
+			$data['time'] = time();
+			if(M('rank')->data($data)->filter('strip_tags')->add()){
+				$this->success('操作成功');
+			}else{
+				$this->error('操作失败');
+			}
+		}
+	}
+	
+	public function avatar(){
+		$data = I('get.data');
+		$identicon = new \Org\Identicon\Identicon();
+		$identicon->displayImage($data,256);
+	}	
 }

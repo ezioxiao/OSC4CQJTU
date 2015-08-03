@@ -129,55 +129,80 @@ ul.timeline p{
 	</div>
 </div>
 </div>
-<!--//TODO
+
+<notempty name="detail.donetime">
 <div class="am-panel am-panel-default">
   <div class="am-panel-hd">用户评价</div>
   <div class="am-panel-bd">
-	<form class="am-form am-form-horizontal">
+	<if condition="$user['uid'] eq session('uid')">
+	<if condition="time()-$detail['donetime'] gt 3600*24*3">
+	<p>工单已完成超过三日，评价关闭。</p>
+	<else/>
+	<form action="{:U('Report/rank',array('order'=>I('get.order'),'type'=>0))}" method="post" class="am-form am-form-horizontal">
+	  <fieldset>
 		<div class="am-input-group">
-		  <input type="text" class="am-form-field" placeholder="说点什么...">
+		  <input type="text" class="am-form-field" name="rankc" placeholder="说点什么...">
 		  <span class="am-input-group-btn">
-			<button class="am-btn am-btn-default" type="button">提交</button>
+			<button class="am-btn am-btn-default" type="submit">评价</button>
 		  </span>
 		</div>
-	</form>
+	  </fieldset>
+	</form>	
+	</if>
 	<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+	</if>
 	<ul class="am-comments-list">
+	<if condition="empty($rank)"><p>暂无评价</p></if>
+	<notempty name="rank.user">
 	 <li class="am-comment">
+      <img class="am-comment-avatar" src="{:U('Report/avatar',array('data'=>sha1($user['uid'])))}">
 	  <div class="am-comment-main"> 
 		<header class="am-comment-hd">
 		  <div class="am-comment-meta">
-			<a href="#link-to-user" class="am-comment-author">用户</a>
-			评价于 <time datetime="">...</time>
+			<a class="am-comment-author">用户</a>
+			评价于 <time datetime="">{:date('Y年m月d日 H:i:s',$rank[user][time])}</time>
 		  </div>
 		</header>
-		<div class="am-comment-bd">...</div>
+		<div class="am-comment-bd">{$rank.user.content}</div>
 	  </div>
 	 </li>
+	 </notempty>
+	 <notempty name="rank.admin">
 	 <li class="am-comment am-comment-flip am-comment-highlight">  
+      <img class="am-comment-avatar" src="{:U('Report/avatar',array('data'=>sha1($rank[admin][user])))}">	 
 	  <div class="am-comment-main">
 		<header class="am-comment-hd">
 		  <div class="am-comment-meta">
-			<a href="#link-to-user" class="am-comment-author">管理员</a>
-			回复于 <time datetime="">...</time>
+			<a class="am-comment-author">{$rank.admin.user}</a>
+			回复于 <time datetime="">{:date('Y年m月d日 H:i:s',$rank[admin][time])}</time>
 		  </div>
 		</header>
-		<div class="am-comment-bd">...</div>
+		<div class="am-comment-bd">{$rank.admin.content}</div>
 	  </div>  
 	 </li> 
+	 </notempty>
 	</ul>
+	<if condition="session('?admin')">
 	<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
-	<form class="am-form am-form-horizontal">
+	<if condition="time()-$detail['donetime'] gt 3600*24*3">
+	<p>工单已完成超过三日，评价关闭。</p>
+	<else/>	
+	<form action="{:U('Report/rank',array('order'=>I('get.order'),'type'=>1))}" method="post"  class="am-form am-form-horizontal">
+	  <fieldset>
 		<div class="am-input-group">
-		  <input type="text" class="am-form-field" placeholder="说点什么...">
+		  <input type="text" class="am-form-field" name="rankc" placeholder="说点什么...">
 		  <span class="am-input-group-btn">
-			<button class="am-btn am-btn-default" type="button">回复</button>
+			<button class="am-btn am-btn-default" type="submit">回复</button>
 		  </span>
 		</div>
-	</form>
+	  </fieldset>
+	</form>	
+	</if>
+	</if>
   </div>
 </div>
--->
+</notempty>
+
 </div>
 
 <include file="Public/footer" />
